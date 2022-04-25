@@ -1,0 +1,154 @@
+{%extends 'parts/navBar.html'%}
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  {%block head%}
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="{%static 'css/signup.css'%}">
+
+  {%endblock head%}
+  
+  {% block content%}
+    
+    <div class="signup-container">
+      
+      <div class="wrapper">
+        {%if message %}
+          <div class="alert {{alertType}}"> 
+            {{message}}
+            {%if alertType == "alert-success"%}
+            <br>
+            Your Code : <span>{{code}}</span>
+            {%endif%}
+          </div>
+        {%endif%}
+        <div class="form-title">
+          Registration Form
+        </div>
+        <form action="{%url 'signup'%}" method="POST" class="form">
+          {% csrf_token %}
+          <div class="inputfield">
+            <label>
+              First Name 
+              <span>*</span>
+            </label>
+            
+            <input type="text" name="f-name" class="input" minlength=2  maxlength=20 required />
+            <p id="fname-error" class="error-message"></p>
+          </div>  
+          <div class="inputfield">
+            <label>
+              Last Name
+              <span>*</span>
+            </label>
+            <input type="text" name="l-name" class="input" minlength= 3 maxlength= 50 required />
+            <p id="lname-error" class="error-message"></p>
+          </div>  
+          <div class="inputfield">
+            <label>
+              Password
+              <span>*</span>
+            </label>
+            <input type="password" name="password" class="input" minlength = 4 required />
+            <span class="eye" onclick="revealPassword()">
+              <i id="hide1"><ion-icon name="eye-outline"></ion-icon></i>
+              <i id="hide2"><ion-icon name="eye-off-outline"></ion-icon></i>
+            </span>
+            <p id="password-error" class="error-message"></p>
+          </div>  
+          <div class="inputfield">
+            <label>
+              Confirm Password
+              <span>*</span>
+            </label>
+            <input type="password" name="confirmPassword" class="input" minlength=4 required />
+            <span class="eye" onclick="revealconfirmPassword()">
+              <i id="hide3"><ion-icon name="eye-outline"></ion-icon></i>
+              <i id="hide4"><ion-icon name="eye-off-outline"></ion-icon></i>
+            </span>
+            <p id="confirmPassword-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>
+              Gender
+              <span>*</span>
+            </label>
+            <div class="custom_select">
+              <select name="gender" required>
+                <option value="">Select</option>
+                <option value="male" >Male</option>
+                <option value="female" >Female</option>
+              </select>
+            </div>
+            <p id="gender-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>
+              Email Address
+              <span>*</span>
+            </label>
+            <input type="email" name="email" placeholder="example@domain.com" class="input" required />
+            <p id="email-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>
+              Phone Number
+              <span>*</span>
+            </label>
+            <input type="tel" name="phone" class="input" minlength=11 maxlength=11 required />
+            <p id="phone-error" class="error-message"></p>
+          </div>
+          <div class="inputfield">
+            <label>
+              Parent's Phone Number
+              <span>*</span>
+            </label>
+            <input type="tel" name="parentPhone" class="input" minlength=11 maxlength=11 required />
+            <p id="parentPhone-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>
+              Education Level
+              <span>*</span>
+            </label>
+            <div class="custom_select">
+              <select name="level" required>
+                <option value="">Select</option>
+                {%for degree in levels%}
+                  <option value="{{degree.levelCode}}">{{degree.levelFullName}}</option>
+                {%endfor%}
+                
+              </select>
+            </div>
+            <p id="level-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>Address</label>
+            <textarea name="address" class="textarea" maxlength=200></textarea>
+            <p id="address-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield">
+            <label>
+              School Name
+              <span>*</span>
+            </label>
+            <input type="text" name="school-name" class="input" maxlength=100 required/>
+            <p id="school-error" class="error-message"></p>
+          </div> 
+          <div class="inputfield terms">
+            <a href="{%url 'login'%}">
+              <p>Already have an account ? .. Sign In</p>
+            </a>
+          </div> 
+          <div class="inputfield">
+            <input type="submit" value="Register" class="submit-btn" />
+          </div>
+          
+        </form>
+      </div>	
+    </div>
+    <script src="{% static 'js/signup.js'%}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  {% endblock content%}
+</html>

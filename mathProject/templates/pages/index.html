@@ -1,0 +1,84 @@
+{%extends 'parts/navBar.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+  {%block head%}
+    
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/index.css'%}" />
+    
+  {%endblock head%}
+  
+    
+  {% block content%}
+    <div class="container">
+      <button id="btnScrollToTop">
+        <ion-icon name="arrow-up-outline"></ion-icon>
+      </button>
+    </div>
+    <section>
+      <div class="showcase-area">
+        <div class="container">
+          <div class="left">
+            <div class="big-title">
+              <h1>Future is here,</h1>
+              <h1>Start Exploring now.</h1>
+            </div>
+            <p class="text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Delectus eius distinctio odit, magni magnam qui ex perferendis
+              vitae!
+            </p>
+            <div class="cta">
+              <a href="{% url 'signup'%}" class="btn">New Student</a>
+              <a href="{% url 'login'%}" class="btn">Sign In</a>
+            </div>
+          </div>
+
+          <div class="right">
+            <img src="{% static 'img/person.png'%}" alt="Person Image" class="person" />
+          </div>
+        </div>
+      </div>
+
+      <!--
+      <div class="bottom-area">
+        <div class="container">
+          <button class="home-toggle-btn toggle-btn">
+            <i class="far fa-moon"></i>
+            <i class="far fa-sun"></i>
+          </button>
+        </div>
+      </div>
+    -->
+    </section>
+
+    <section>
+
+      <div class="data showcase-area">
+
+      </div>
+
+    </section>
+    
+    {%if levels%}
+      <section>
+
+        <div class="title">
+          <h1>Our Regular Courses</h1>
+          
+        </div>
+        
+        {%include 'parts/levelsCards.html'%}
+
+      </section>
+    {%endif%}
+    
+    <section>
+      {%include 'parts/contactFormPage.html'%}
+    </section>
+
+  {% endblock content%}
+  
+</html>

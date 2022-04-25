@@ -1,0 +1,52 @@
+{% extends 'parts/sideBar.html'%}
+{%load static%}
+
+{%block head%}
+    <link href="{%static 'css/courseCards.css'%}" rel='stylesheet'/>
+{%endblock head%}
+
+{% block section %}   
+    <div class="cards">
+        {% for instance in registeredLectures %}
+            {% if instance.lecture.active %}
+                <a href="{%url 'lecture'  lecture_id=instance.lecture.id %}" title="{{instance.lecture.title}}">
+                    <div class="card">
+                        
+                        <div class="post-module">
+                            <!-- Thumbnail-->
+                            <div class="thumbnail">
+                                <div class="date">
+                                    <div class="day">{{instance.lecture.creationTime.day}}</div>
+                                    <div class="month">{{instance.lecture.creationTime|date:'M'}}</div>
+                                </div>
+                                <img src="{{instance.lecture.image.url}}" alt="lecture-image"/>
+                            </div><!-- Posts Content-->
+                            <div class="post-content">
+                                <div class="category">{{instance.lecture.branch}}</div>
+                                <h1 class="title">{{instance.lecture.title}}</h1>
+                                <h2 class="sub_title">{{instance.lecture.gradeLevel}}</h2>
+                                <div class="description">
+                                    <div class="files">
+                                        {% if files %}
+                                            <label class="lecture-label" ><h4>Lecture Files :</h3></label>
+                                                <ul>
+                                                    {%for item in files%}
+                                                        {%if item.lecture.id == instance.lecture.id and item.isActive %}
+                                                            <a href="{{item.file.url}}" target="_blank"><li>{{item.filename}}</li></a>
+                                                        {%endif%}
+                                                    {%endfor%}
+                                                </ul>
+                                            
+                                        {%endif%}
+                                            </div>
+                                </div>
+                                <div class="post-meta"><span class="timestamp"><i class="fa fa-clock-">o</i> 6 mins ago</span><span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor%}
+    </div>
+    <script src="{% static 'js/courseCards.js'%}"></script>     
+{% endblock section %}   

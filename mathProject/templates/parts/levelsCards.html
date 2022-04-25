@@ -1,0 +1,39 @@
+
+{%load static%}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{%static 'css/levelCards.css'%}" />
+    </head>
+    <body>
+        
+        <div class="section">
+            
+            <div class="cards" >
+                
+                {%for card in levels%}
+
+                    {%if card.isActive %}
+                        <div class="single-card">
+
+                            <div class="single-card-circle" style="background:{{card.color}}">
+                                
+                                <h2>{{card.levelNameInLetters|capfirst}} <br> {{card.numberOfLevelInLetters|capfirst}}</h2>
+            
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    FHD videos , live sessions , online Quizzes , personal assistant and high standard of thinking Question
+                                </p>
+                                <a href="#" class="btn" style="background:{{card.color}}">Read More</a>
+                            </div>
+                        
+                        </div>
+                    {%endif%}
+    
+                {%endfor%}
+            </div>
+        </div>
+    </body>
+</html>

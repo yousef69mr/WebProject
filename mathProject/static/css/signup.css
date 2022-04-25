@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+*{
+  font-family: 'Montserrat', sans-serif;
+}
+
+.signup-container{
+  margin-top: 60px;
+  margin-bottom: 90px;
+}
+/*
+#errormessage{
+  justify-items: center;
+  text-align: center;
+  border-radius: 8px;
+  position: relative;
+  font-size: 1.1em;
+  margin-bottom: 30px;
+  background-color: rgba(206, 32, 32, 0.788);
+  border: rgb(110, 38, 38) solid 2px;
+}
+
+ul{
+  list-style-type: square;
+  list-style-position: inside;
+}
+#errormessage li{
+  padding: 20px;
+  color: rgb(110, 38, 38);
+}
+*/
+
+.wrapper{
+  max-width: 800px;
+  width: 100%;
+  background: #fff;
+  margin: 20px auto;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.125);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.wrapper .alert {
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+.wrapper .alert span{
+  color: rgb(237, 39, 32);
+}
+
+.wrapper .alert-success {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+}
+
+.wrapper .alert-danger {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+
+}
+
+.wrapper .form-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #fec107;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.wrapper .form{
+  width: 100%;
+}
+
+.wrapper .form .inputfield{
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper .form .inputfield label span{
+  font-size: large;
+  color: red;
+}
+
+.wrapper .form .inputfield label{
+  width: 200px;
+  color: #757575;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.wrapper .form .inputfield .input,
+.wrapper .form .inputfield .textarea{
+  width: 100%;
+  outline: none;
+  border: 1px solid #d5dbd9;
+  font-size: 15px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.wrapper .form .inputfield .input.error,
+.wrapper .form .inputfield .textarea.error{
+  border: 2.5px solid red;
+}
+
+.wrapper .form .inputfield p.error-message{
+  padding-left: 5px;
+  color: red;
+}
+
+.wrapper .form .inputfield .textarea{
+  width: 100%;
+  height: 125px;
+  resize: none;
+}
+
+.wrapper .form .inputfield .custom_select{
+  position: relative;
+  width: 100%;
+  height: 37px;
+}
+
+.wrapper .form .inputfield .custom_select:before{
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  border: 8px solid;
+  border-color: #d5dbd9 transparent transparent transparent;
+  pointer-events: none;
+}
+
+.wrapper .form .inputfield .custom_select select{
+  -webkit-appearance: none;
+  -moz-appearance:   none;
+  appearance:        none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  border: 0px;
+  padding: 8px 10px;
+  font-size: 15px;
+  border: 1px solid #d5dbd9;
+  border-radius: 5px;
+}
+
+.wrapper .form .inputfield .custom_select select option{
+  border-radius: top 0px;
+
+}
+
+.wrapper .form .inputfield .input:focus,
+.wrapper .form .inputfield .textarea:focus,
+.wrapper .form .inputfield .custom_select select:focus{
+  border: 1px solid #fec107;
+}
+
+.wrapper .form .inputfield p{
+  text-align: center;
+  justify-content: center;
+  font-size: 15px;
+  color: red;
+}
+
+
+
+.wrapper .form .inputfield .submit-btn{
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 15px; 
+  border: 0px;
+  background:  #fec107;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  outline: none;
+}
+
+.wrapper .form .inputfield .submit-btn:disabled{
+  background:  rgba(243, 0, 0, 0.87);
+}
+
+.wrapper .form .inputfield .submit-btn:hover{
+  background: #ffd658;
+}
+
+.wrapper .form .inputfield:last-child{
+  margin-bottom: 0;
+}
+
+.wrapper .form .inputfield a{
+    width: 100%;
+}
+
+
+.eye{
+  position: relative;
+  right: 25px;
+}
+
+#hide1{
+  display: none;
+}
+
+#hide3{
+  display: none;
+}
+
+
+
+@media (max-width:420px) {
+  .wrapper .form .inputfield{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .wrapper .form .inputfield label{
+    margin-bottom: 5px;
+  }
+  .wrapper .form .inputfield.terms{
+    flex-direction: row;
+  }
+}

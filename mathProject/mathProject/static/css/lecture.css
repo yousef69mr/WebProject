@@ -1,0 +1,65 @@
+
+.upper-labbel{
+    display: none;
+}
+
+.home-section{
+    background: url(../img/math/Web\ capture_11-4-2022_103754_.jpeg) center center ;
+    background-repeat: no-repeat ;
+    
+    background-size: cover; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container{
+    
+    
+    outline: dashed 1px black;
+    /* Setup */
+    position: relative;
+}
+
+iframe{
+    width: 720px;
+    height: 498px;
+    background-color: red;
+    /* Center vertically and horizontally */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+}
+
+@media screen and (max-width: 1400px){
+    
+    iframe{
+    
+        height: 450px;
+        width: 630px;
+    }
+}
+
+@media screen and (max-width: 1300px){
+   
+    iframe{
+    
+        height: 350px;
+        width: 530px;
+    }
+}
+
+@media screen and (max-width: 600px){
+   
+    iframe{
+    
+        height: 350px;
+        width: 400px;
+    }
+}

@@ -1,0 +1,15 @@
+{% extends 'parts/sideBar.html'%}
+{%load static%}
+
+{%block head%}
+    <link rel="stylesheet" href="{% static 'css/lecture.css'%}" />
+{%endblock head%}
+
+{% block section %}   
+    
+    <div class="video-container">
+        <iframe src="{{lecture.sourceLink}}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen  title="{{lecture.title}}"></iframe>
+    </div>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+
+{% endblock section %}   
