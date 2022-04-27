@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 
 from users.models import Student
 from .models import File, Lecture,RegisteredLecture
-from pages.models import Message
+from pages.models import Message,Level
 # Create your views here.
 
 def getFiles(request):
@@ -83,6 +83,104 @@ def dashboardPage(request):
     student = get_object_or_404(Student,id=request.user.id)
     
     return render(request,'courses/dashboard.html',{
+        'student':student,
+    })
+
+def editProfilePage(request):
+
+    levels=Level.objects.all()
+
+    if not request.user.is_authenticated:
+
+        return redirect(reverse("login"))
+        
+    student = get_object_or_404(Student,id=request.user.id)
+
+    if request.method == "POST":
+
+        fname = request.POST.get('f-name')
+        lname = request.POST.get('l-name')
+        Pass = request.POST.get('password')
+        Pass2 = request.POST.get('confirmPassword')
+        mail = request.POST.get('email')
+        gender = request.POST.get('gender')
+        phone = request.POST.get('phone')
+        parentphone = request.POST.get('parentPhone')
+        level = request.POST.get('level')
+        schoolName  = request.POST.get('school-name')
+        address = request.POST.get('address')
+
+        try:
+
+            student.set_password(Pass)
+            
+            student.save()
+
+            levelObject = Level.objects.get(levelCode=level)
+            Student.objects.filter(id=request.user.id).update(
+                username=fname+" "+lname,
+                last_name=lname,
+                first_name=fname,
+                email=mail.lower(),
+                #password=Pass,
+                phone=phone,
+                gender=gender,
+                parentPhone=parentphone,
+                level=levelObject,
+                address=address,
+                schoolname=schoolName
+            )
+
+           
+
+            """
+            student.set_first_name(fname)
+            
+            print(student.first_name)
+            student.set_last_name(lname)
+            print(student.last_name)
+            student.set_username(student.first_name +" "+student.last_name)
+            print(student.username)
+            student.set_password(Pass)
+            print(student.password)
+            student.set_email(mail.lower())
+            print(student.email)
+            student.set_gender(gender)
+            print(student.gender)
+            student.set_Phone(phone)
+            print(student.phone)
+            student.set_Parent_Phone(parentphone)
+            print(student.parentPhone)
+            student.set_Educational_Level(levelObject)
+            print(student.level)
+            student.set_School_Name(schoolName)
+            print(student.schoolname)
+            student.set_Address(address)
+            print(student.address)
+            """
+
+            return render(request,'courses/editProfile.html',{
+            "levels":levels,
+            "message":"User's Data is updated successfully ",
+            "alertType":"alert-success",
+            'student':student,
+        })
+
+        except:
+
+            return render(request, 'courses/editProfile.html', {
+                "levels":levels,
+                "message":"An Error Occured during Registeration",
+                "alertType":"alert-danger",
+                'student':student,
+
+            })
+        
+
+    return render(request,'courses/editProfile.html',{
+        "levels":levels,
+        "message":"",
+        "alertType":"",
         'student':student,
     })
 

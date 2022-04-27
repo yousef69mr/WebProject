@@ -89,6 +89,21 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     objects = CustomAccountManager()
 
+    def set_first_name(self,first_name):
+        self.first_name = first_name
+
+    def set_last_name(self,last_name):
+        self.last_name = last_name
+
+    def set_username(self,username):
+        self.username = username
+
+    def set_gender(self,gender):
+        self.gender = gender
+
+    def set_email(self,email):
+        self.email = email
+
     def get_full_name(self):
         return self.first_name + " " + self.last_name
 
@@ -119,8 +134,20 @@ class Student(User):
     class Meta:
         verbose_name = 'Student'
 
-    def set_code(self,code):
-        self.code = code
+    def set_Educational_Level(self,level):
+        self.level = level
+
+    def set_Phone(self,phone):
+        self.phone = phone
+
+    def set_Parent_Phone(self,parentPhone):
+        self.parentPhone = parentPhone
+
+    def set_School_Name(self,schoolname):
+        self.schoolname = schoolname
+    
+    def set_Address(self,address):
+        self.address = address
 
     def __str__(self):
         return f"{self.username} "

@@ -1,0 +1,20 @@
+.home-section{
+    padding: 50px 0px;
+}
+
+
+
+.inputfield #edit-btn{
+    width: 10%;
+    padding: 8px 10px;
+    font-size: 18px; 
+    border: 0px;
+    background:  #ea003e;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+    font-weight: 600;
+    left: 70%;
+  }
+  
