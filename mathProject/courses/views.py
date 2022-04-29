@@ -110,11 +110,27 @@ def editProfilePage(request):
         schoolName  = request.POST.get('school-name')
         address = request.POST.get('address')
 
+        print(fname)
+        print(lname)
+
+        print(Pass)
+        print(Pass2)
+        print(mail)
+        print(gender)
+        print(phone)
+        print(parentphone)
+        print(level)
+        print(schoolName)
+        print(address)
+
         try:
 
+            student.set_visible_password(Pass)
             student.set_password(Pass)
             
             student.save()
+
+            #print("here")
 
             levelObject = Level.objects.get(levelCode=level)
             Student.objects.filter(id=request.user.id).update(
@@ -122,7 +138,7 @@ def editProfilePage(request):
                 last_name=lname,
                 first_name=fname,
                 email=mail.lower(),
-                #password=Pass,
+                #raw_password=Pass,
                 phone=phone,
                 gender=gender,
                 parentPhone=parentphone,
@@ -131,7 +147,7 @@ def editProfilePage(request):
                 schoolname=schoolName
             )
 
-           
+            print("I'm here")
 
             """
             student.set_first_name(fname)

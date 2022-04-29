@@ -1,13 +1,13 @@
 from django.contrib import admin
 from .models import Student,Admin,User,Login
 from django.contrib.auth.admin import UserAdmin
-from .forms import AdminUserChangeForm
+from .forms import AdminUserChangeForm ,AdminUserCreationForm
 
 # Register your models here.
 
 class StudentAdmin(admin.ModelAdmin):
     model = Student
-    list_display= ['id','username','email','gender','level']
+    list_display= ['id','username','email','phone','gender','level']
     list_display_links= ['username','level','email']
     list_editable =['gender']
     search_fields=['phone']
@@ -15,7 +15,7 @@ class StudentAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Authentication Info',{
-            'fields':('email','password')
+            'fields':('email','password','raw_password')
         }),
         ('Personal info',{
             'fields':('username','first_name','last_name','gender','address')
@@ -35,7 +35,7 @@ class StudentAdmin(admin.ModelAdmin):
     ]
 
     form = AdminUserChangeForm
-    #add_form = AdminUserCreationForm()
+    add_form = AdminUserCreationForm()
 
 
 

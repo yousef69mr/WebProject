@@ -227,7 +227,7 @@ def signupPage(request):
                 last_name=lname,
                 first_name=fname,
                 email=mail.lower(),
-                #password=Pass,
+                raw_password=Pass,
                 phone=phone,
                 gender=gender,
                 parentPhone=parentphone,

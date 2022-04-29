@@ -16,9 +16,11 @@ const gender = document.querySelector('select[name="gender"]')
 const gendermessage = document.querySelector('#gender-error')
 /*****************************************************/
 const email = document.querySelector('input[name="email"]')
+const emailDefault = document.querySelector('input[name="defaultEmailValue"]')
 const emailmessage = document.querySelector('#email-error')
 /*****************************************************/
 const phone = document.querySelector('input[name="phone"]')
+const phoneDefault = document.querySelector('input[name="defaultPhoneValue"]')
 const phonemessage = document.querySelector('#phone-error')
 /*****************************************************/
 const parentPhone = document.querySelector('input[name="parentPhone"]')
@@ -36,7 +38,8 @@ const form = document.querySelector(".form");
 const inputElements = form.querySelectorAll("input, select, checkbox, textarea");
 
 console.log(editbtn)
-
+console.log(emailDefault)
+console.log(phoneDefault)
 var first = 0;
 
 editbtn.addEventListener('click',()=>{
@@ -46,6 +49,55 @@ editbtn.addEventListener('click',()=>{
             inputElements[key].disabled = false;
         }
         first = 1; 
+
+
+        
+        $(document).ready(function(){
+            
+            setInterval(()=>{
+                $.ajax({
+
+                    type :'GET',
+                    url : "/getStudents",
+                    success: function(response){
+                        
+                        for(var key in response.students){
+                            if(response.students[key].email.toLowerCase() === email.value.toLowerCase() && emailDefault.value.toLowerCase() !== response.students[key].email.toLowerCase()){
+                                //console.log(response.students[key]);
+                                email.classList.add('error');
+                                emailmessage.textContent = "This Email already exists";
+                            }else if(response.students[key].phone === phone.value && phoneDefault.value.toLowerCase() !== response.students[key].phone.toLowerCase()){
+                                phone.classList.add('error');
+                                phonemessage.textContent= "This Phone Number is used before ";
+                                //console.log(response.students[key]);
+                            }
+                        }
+                        console.log(response.students)
+                    },
+                    error: function(response){
+                        alert("An Error Occured");
+                    }
+
+                });
+
+                submitbtn.disabled = false;
+                
+
+                console.log(inputElements);
+
+                for(var key in inputElements){
+                    console.log(inputElements[key]);
+                    if(inputElements[key].classList.contains('error')){
+                        submitbtn.disabled = true;
+                        break;
+                    }
+                }
+
+
+            },3000);
+        });
+
+
 
     }else{
         console.log("not active")
@@ -137,7 +189,8 @@ gender.addEventListener('change',(e)=>{
 
 
 email.addEventListener('input',(e)=>{
-    if(!e.target.value.includes('@') || !e.target.value.includes('.')){
+
+    if(!e.target.value.includes('@') || !e.target.value.includes('.') || e.target.value.indexOf('@') < 2 ){
         email.classList.add('error')
         emailmessage.textContent = "invalid email format"
         //submitbtn.disabled = true;
@@ -199,50 +252,6 @@ address.addEventListener('change',(e)=>{
     }
 });
 
-
-
-$(document).ready(function(){
-    setInterval(()=>{
-        $.ajax({
-
-            type :'GET',
-            url : "/getStudents",
-            success: function(response){
-                
-                for(var key in response.students){
-                    if(response.students[key].email.toLowerCase() === email.value.toLowerCase()){
-                        //console.log(response.students[key]);
-                        email.classList.add('error');
-                        emailmessage.textContent = "This Email already exists";
-                    }else if(response.students[key].phone === phone.value){
-                        phone.classList.add('error');
-                        phonemessage.textContent= "This Phone Number is used before ";
-                        //console.log(response.students[key]);
-                    }
-                }
-                console.log(response.students)
-            },
-            error: function(response){
-                alert("An Error Occured");
-            }
-
-        });
-
-        submitbtn.disabled = false;
-        
-
-        console.log(inputElements);
-
-        for(var key in inputElements){
-            if(inputElements[key].classList.contains('error')){
-                submitbtn.disabled = true;
-                break;
-            }
-        }
-
-
-    },3000);
-});
 
 
 

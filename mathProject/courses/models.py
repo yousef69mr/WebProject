@@ -48,7 +48,7 @@ class RegisteredLecture(models.Model):
         return reverse("lecture", kwargs={'lecture_id':self.id})
 
     def  __str__(self):
-        return f"({self.user.id}) , ({self.lecture.id})"
+        return f"( Student : {self.user.id} ) , ( Lecture : {self.lecture.id} )"
 
 
 class File(models.Model):

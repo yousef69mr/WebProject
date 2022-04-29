@@ -1,5 +1,5 @@
 
-from asyncio.windows_events import NULL
+
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.db import models
@@ -74,6 +74,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(_('Email Address'), unique=True)
     password = models.CharField(max_length=100)
+    raw_password = models.CharField(max_length=100)
     gender = models.CharField(max_length=10,choices=GENDER)
     is_staff = models.BooleanField(default=False,help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')
     is_active = models.BooleanField(default=True,help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')
@@ -103,6 +104,9 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     def set_email(self,email):
         self.email = email
+
+    def set_visible_password(self,password):
+        self.raw_password = password
 
     def get_full_name(self):
         return self.first_name + " " + self.last_name

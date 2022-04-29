@@ -116,7 +116,8 @@ gender.addEventListener('change',(e)=>{
 
 
 email.addEventListener('input',(e)=>{
-    if(!e.target.value.includes('@') || !e.target.value.includes('.')){
+    
+    if(!e.target.value.includes('@') || !e.target.value.includes('.') || e.target.value.indexOf('@') < 2){
         email.classList.add('error')
         emailmessage.textContent = "invalid email format"
         //submitbtn.disabled = true;
