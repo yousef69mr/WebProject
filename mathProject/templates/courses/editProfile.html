@@ -25,129 +25,214 @@
                         <button class="submit-btn" id="edit-btn"><ion-icon name="create-outline"></ion-icon></button>
                     </div>
                 </div>
-                
-                <form action="{%url 'editProfile'%}" method="POST" class="form">
-                    {% csrf_token %}
-                    <div class="inputfield">
-                        <label>
-                            First Name 
-                            <span>*</span>
-                        </label>
-                        
-                        <input type="text" name="f-name" class="input" value="{{student.first_name}}" minlength=2  maxlength=20 required disabled/>
-                        <p id="fname-error" class="error-message"></p>
-                    </div>  
-                    <div class="inputfield">
-                        <label>
-                            Last Name
-                            <span>*</span>
-                        </label>
-                        <input type="text" name="l-name" class="input" value="{{student.last_name}}" minlength= 3 maxlength= 50 required disabled/>
-                        <p id="lname-error" class="error-message"></p>
-                    </div>  
-                    <div class="inputfield">
-                        <label>
-                            Password
-                            <span>*</span>
-                        </label>
-                        <input type="password" name="password" class="input" value="{{student.raw_password}}" minlength = 4 required disabled/>
-                        <span class="eye" onclick="revealPassword()">
-                            <i id="hide1"><ion-icon name="eye-outline"></ion-icon></i>
-                            <i id="hide2"><ion-icon name="eye-off-outline"></ion-icon></i>
-                        </span>
-                        <p id="password-error" class="error-message"></p>
-                    </div>  
-                    <div class="inputfield">
-                        <label>
-                            Confirm Password
-                            <span>*</span>
-                        </label>
-                        <input type="password" name="confirmPassword" class="input" minlength=4 required disabled/>
-                        <span class="eye" onclick="revealconfirmPassword()">
-                            <i id="hide3"><ion-icon name="eye-outline"></ion-icon></i>
-                            <i id="hide4"><ion-icon name="eye-off-outline"></ion-icon></i>
-                        </span>
-                        <p id="confirmPassword-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>
-                            Gender
-                            <span>*</span>
-                        </label>
-                        <div class="custom_select">
-                            <select name="gender" required disabled>
-                                <option value="">Select</option>
-                                <option value="{{student.gender}}" selected hidden>{{student.gender|title}}</option>
-                                <option value="male" >Male</option>
-                                <option value="female" >Female</option>
-                            </select>
-                        </div>
-                        <p id="gender-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>
-                            Email Address
-                            <span>*</span>
-                        </label>
-                        <input type="hidden" name="defaultEmailValue" value="{{student.email}}" class="input" required/>
-                        <input type="email" name="email" value="{{student.email}}" placeholder="example@domain.com" class="input" required disabled/>
-                        <p id="email-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>
-                            Phone Number
-                            <span>*</span>
-                        </label>
-                        <input type="hidden" name="defaultPhoneValue" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required/>
-                        <input type="tel" name="phone" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required disabled/>
-                        <p id="phone-error" class="error-message"></p>
-                    </div>
-                    <div class="inputfield">
-                        <label>
-                            Parent's Phone Number
-                            <span>*</span>
-                        </label>
-                        <input type="tel" name="parentPhone" class="input" value="{{student.parentPhone}}" minlength=11 maxlength=11 required disabled/>
-                        <p id="parentPhone-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>
-                            Education Level
-                            <span>*</span>
-                        </label>
-                        <div class="custom_select">
-                            <select name="level" required disabled> 
-                                
-                            <option value="">Select</option>
-                            <option value="{{student.level.levelCode}}" selected hidden>{{student.level.levelFullName|title}}</option>
-
-                            {%for degree in levels%}
-                                <option value="{{degree.levelCode}}">{{degree.levelFullName}}</option>
-                            {%endfor%}
+                {% if student.is_superuser%}
+                    <form action="{%url 'editProfile'%}" method="POST" class="form">
+                        {% csrf_token %}
+                        <div class="inputfield">
+                            <label>
+                                First Name 
+                                <span>*</span>
+                            </label>
                             
-                            </select>
+                            <input type="text" name="f-name" class="input" value="{{student.first_name}}" minlength=2  maxlength=20 required disabled/>
+                            <p id="fname-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Last Name
+                                <span>*</span>
+                            </label>
+                            <input type="text" name="l-name" class="input" value="{{student.last_name}}" minlength= 3 maxlength= 50 required disabled/>
+                            <p id="lname-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Email Address
+                                <span>*</span>
+                            </label>
+                            <input type="hidden" name="defaultEmailValue" value="{{student.email}}" class="input" required/>
+                            <input type="email" name="email" value="{{student.email}}" placeholder="example@domain.com" class="input" required disabled/>
+                            <p id="email-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Password
+                                <span>*</span>
+                            </label>
+                            <input type="password" name="password" class="input" value="{{student.raw_password}}" minlength = 4 required disabled/>
+                            <span class="eye" onclick="revealPassword()">
+                                <i id="hide1"><ion-icon name="eye-outline"></ion-icon></i>
+                                <i id="hide2"><ion-icon name="eye-off-outline"></ion-icon></i>
+                            </span>
+                            <p id="password-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Confirm Password
+                                <span>*</span>
+                            </label>
+                            <input type="password" name="confirmPassword" class="input" minlength=4 required disabled/>
+                            <span class="eye" onclick="revealconfirmPassword()">
+                                <i id="hide3"><ion-icon name="eye-outline"></ion-icon></i>
+                                <i id="hide4"><ion-icon name="eye-off-outline"></ion-icon></i>
+                            </span>
+                            <p id="confirmPassword-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Gender
+                                <span>*</span>
+                            </label>
+                            <div class="custom_select">
+                                <select name="gender" disabled>
+                                    <option value="">Select</option>
+                                    <option value="{{student.gender}}" selected hidden>{{student.gender|title}}</option>
+                                    <option value="male" >Male</option>
+                                    <option value="female" >Female</option>
+                                </select>
+                            </div>
+                            <p id="gender-error" class="error-message"></p>
+                        </div> 
+                        
+                        <div class="inputfield">
+                            <label>
+                                Phone Number
+                                <span>*</span>
+                            </label>
+                            <input type="hidden" name="defaultPhoneValue" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required/>
+                            <input type="tel" name="phone" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required disabled/>
+                            <p id="phone-error" class="error-message"></p>
                         </div>
-                        <p id="level-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>Address</label>
-                        <textarea name="address" class="textarea" maxlength=200 disabled>{{student.address}}</textarea>
-                        <p id="address-error" class="error-message"></p>
-                    </div> 
-                    <div class="inputfield">
-                        <label>
-                            School Name
-                            <span>*</span>
-                        </label>
-                        <input type="text" name="school-name" value="{{student.schoolname}}" class="input" maxlength=100 required disabled/>
-                        <p id="school-error" class="error-message"></p>
-                    </div> 
-                    
-                    <div class="inputfield">
-                        <input type="submit" value="Register" class="submit-btn" disabled/>
-                    </div>
-                    
-                </form>
+                        
+                        <div class="inputfield">
+                            <input type="submit" value="Register" class="submit-btn" disabled/>
+                        </div>
+                        
+                    </form>
+                {%else%}
+                    <form action="{%url 'editProfile'%}" method="POST" class="form">
+                        {% csrf_token %}
+                        <div class="inputfield">
+                            <label>
+                                First Name 
+                                <span>*</span>
+                            </label>
+                            
+                            <input type="text" name="f-name" class="input" value="{{student.first_name}}" minlength=2  maxlength=20 required disabled/>
+                            <p id="fname-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Last Name
+                                <span>*</span>
+                            </label>
+                            <input type="text" name="l-name" class="input" value="{{student.last_name}}" minlength= 3 maxlength= 50 required disabled/>
+                            <p id="lname-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Password
+                                <span>*</span>
+                            </label>
+                            <input type="password" name="password" class="input" value="{{student.raw_password}}" minlength = 4 required disabled/>
+                            <span class="eye" onclick="revealPassword()">
+                                <i id="hide1"><ion-icon name="eye-outline"></ion-icon></i>
+                                <i id="hide2"><ion-icon name="eye-off-outline"></ion-icon></i>
+                            </span>
+                            <p id="password-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
+                                Confirm Password
+                                <span>*</span>
+                            </label>
+                            <input type="password" name="confirmPassword" class="input" minlength=4 required disabled/>
+                            <span class="eye" onclick="revealconfirmPassword()">
+                                <i id="hide3"><ion-icon name="eye-outline"></ion-icon></i>
+                                <i id="hide4"><ion-icon name="eye-off-outline"></ion-icon></i>
+                            </span>
+                            <p id="confirmPassword-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Gender
+                                <span>*</span>
+                            </label>
+                            <div class="custom_select">
+                                <select name="gender" required disabled>
+                                    <option value="">Select</option>
+                                    <option value="{{student.gender}}" selected hidden>{{student.gender|title}}</option>
+                                    <option value="male" >Male</option>
+                                    <option value="female" >Female</option>
+                                </select>
+                            </div>
+                            <p id="gender-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Email Address
+                                <span>*</span>
+                            </label>
+                            <input type="hidden" name="defaultEmailValue" value="{{student.email}}" class="input" required/>
+                            <input type="email" name="email" value="{{student.email}}" placeholder="example@domain.com" class="input" required disabled/>
+                            <p id="email-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Phone Number
+                                <span>*</span>
+                            </label>
+                            <input type="hidden" name="defaultPhoneValue" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required/>
+                            <input type="tel" name="phone" class="input" value="{{student.phone}}" minlength=11 maxlength=11 required disabled/>
+                            <p id="phone-error" class="error-message"></p>
+                        </div>
+                        <div class="inputfield">
+                            <label>
+                                Parent's Phone Number
+                                <span>*</span>
+                            </label>
+                            <input type="tel" name="parentPhone" class="input" value="{{student.parentPhone}}" minlength=11 maxlength=11 required disabled/>
+                            <p id="parentPhone-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                Education Level
+                                <span>*</span>
+                            </label>
+                            <div class="custom_select">
+                                <select name="level" required disabled> 
+                                    
+                                <option value="">Select</option>
+                                <option value="{{student.level.levelCode}}" selected hidden>{{student.level.levelFullName|title}}</option>
+
+                                {%for degree in levels%}
+                                    <option value="{{degree.levelCode}}">{{degree.levelFullName}}</option>
+                                {%endfor%}
+                                
+                                </select>
+                            </div>
+                            <p id="level-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>Address</label>
+                            <textarea name="address" class="textarea" maxlength=200 disabled>{{student.address}}</textarea>
+                            <p id="address-error" class="error-message"></p>
+                        </div> 
+                        <div class="inputfield">
+                            <label>
+                                School Name
+                                <span>*</span>
+                            </label>
+                            <input type="text" name="school-name" value="{{student.schoolname}}" class="input" maxlength=100 required disabled/>
+                            <p id="school-error" class="error-message"></p>
+                        </div> 
+                        
+                        <div class="inputfield">
+                            <input type="submit" value="Register" class="submit-btn" disabled/>
+                        </div>
+                        
+                    </form>
+                {%endif%}
             </div>	
         
         <script src="{% static 'js/editProfile.js'%}"></script>

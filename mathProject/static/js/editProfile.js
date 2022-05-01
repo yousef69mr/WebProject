@@ -58,7 +58,7 @@ editbtn.addEventListener('click',()=>{
                 $.ajax({
 
                     type :'GET',
-                    url : "/getStudents",
+                    url : "/getUsers",
                     success: function(response){
                         
                         for(var key in response.students){
@@ -66,7 +66,7 @@ editbtn.addEventListener('click',()=>{
                                 //console.log(response.students[key]);
                                 email.classList.add('error');
                                 emailmessage.textContent = "This Email already exists";
-                            }else if(response.students[key].phone === phone.value && phoneDefault.value.toLowerCase() !== response.students[key].phone.toLowerCase()){
+                            }else if(response.students[key].phone === phone.value && response.users[key].phone != "" && phoneDefault.value.toLowerCase() !== response.students[key].phone.toLowerCase()){
                                 phone.classList.add('error');
                                 phonemessage.textContent= "This Phone Number is used before ";
                                 //console.log(response.students[key]);

@@ -7,7 +7,7 @@ from django.db import models
 from django.urls import reverse
 from .validators import validate_file_extension,validate_image_file_extension
 from pages.models import Level
-from users.models import Student
+from users.models import User
 
 # Create your models here.
 
@@ -36,7 +36,7 @@ class Lecture(models.Model):
 
 class RegisteredLecture(models.Model):
 
-    user=models.ForeignKey(Student,on_delete=models.CASCADE,verbose_name='Student')
+    user=models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='Student')
     lecture =models.ForeignKey(Lecture,on_delete=models.CASCADE,default=NULL)
     regesterTime =models.DateTimeField(default=datetime.now)
 

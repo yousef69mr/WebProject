@@ -76,24 +76,24 @@ def existPhone(phone):
 
 """
 
-def existStudentByEmail(mail,password):
-    students = Student.objects.all()
+def existUserByEmail(mail,password):
+    users = User.objects.all()
 
-    for student in students:
-        if student.email.lower() == mail.lower() and student.check_password(password) :
+    for user in users:
+        if user.email.lower() == mail.lower() and user.check_password(password) :
             print('account found by email')
             return True
 
     return False
 
-def existStudentByCode(code,password):
+def existUserByCode(code,password):
 
     try:
         
-        student = get_object_or_404(Student,id=code)
-        print(student)
+        user = get_object_or_404(User,id=code)
+        print(user)
         print(password)
-        if student and student.check_password(password) :
+        if user and user.check_password(password) :
             print('account found by code')
             return True
     except:
@@ -110,24 +110,37 @@ def loginPage(request):
 
         print(mail)
         print(password)
-        
-        if existStudentByEmail(mail,password):
+        #student = get_object_or_404(Student,email=mail.lower())
+       
+
+
+        if existUserByEmail(mail,password):
             
             try:
                 #student = get_object_or_404(Student,email=mail.lower())
                 
-                student = authenticate(request,username=mail.lower(),password=password)
-                print(student)
-                if student == None:
+                user = authenticate(request,username=mail.lower(),password=password)
+                print(user)
+                if user == None:
                     return render(request, 'pages/signin.html', {
 
-                    "errorMessage": "No Such Student is created"
+                    "errorMessage": "No Such User is created"
                 })
 
-                loginObject = Login(user=student,email=mail)
-                loginObject.save()
+                if not user.is_active:
+                    return render(request, 'pages/signin.html', {
+
+                        "errorMessage": "This User is not activated please contact the Administrator"
+                    })
+
+                loginObject = Login(user=user,email=user.email)
+                
+                loginObject.set_login_method('email')
+                print("here")
+                #loginObject.save()
+
                 print(loginObject)
-                login(request,student)
+                login(request,user)
 
                 return redirect(reverse("dashboard"))
                 
@@ -136,24 +149,32 @@ def loginPage(request):
                     "errorMessage": "An Error Occured ... Try Again Later"
                 })
            
-        elif existStudentByCode(mail,password):
+        elif existUserByCode(mail,password):
 
             try:
-                user = get_object_or_404(User,id=mail)
+                givenUser = get_object_or_404(User,id=mail)
+                
+                if givenUser == None:
 
-                student = authenticate(request,username=user.email.lower(),password=password)
+                    return render(request, 'pages/signin.html', {
+
+                    "errorMessage": "No Such Student is created"
+
+                    })
+
+                user = authenticate(request,username=givenUser.email.lower(),password=password)
                 #print(student)
-                if student == None:
+                if user == None:
                     return render(request, 'pages/signin.html', {
 
                     "errorMessage": "No Such Student is created"
                 })
 
 
-                loginObject = Login(user=student,email=student.email)
+                loginObject = Login(user=user,email=user.email)
                 loginObject.save()
 
-                login(request,student)
+                login(request,user)
 
                 return redirect(reverse("dashboard"))
                 

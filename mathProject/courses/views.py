@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render,HttpResponseRedirect,get_object_or
 from django.urls import reverse
 from django.contrib.auth import logout
 
-from users.models import Student
+from users.models import Student,User
 from .models import File, Lecture,RegisteredLecture
 from pages.models import Message,Level
 # Create your views here.
@@ -23,7 +23,7 @@ def lecture(request,lecture_id):
         return redirect(reverse("login"))
         
 
-    student = get_object_or_404(Student,id=request.user.id)
+    student = get_object_or_404(User,id=request.user.id)
     #print(request.user)
     
     lecture = get_object_or_404(Lecture,id=lecture_id)
@@ -42,13 +42,22 @@ def lectures(request):
         return redirect(reverse("login"))
         
 
-    student = get_object_or_404(Student,id=request.user.id)
+    student = get_object_or_404(User,id=request.user.id)
     registered = RegisteredLecture.objects.filter(user=student)
     lectures = registered.values_list('lecture',flat=True)
     #print(registered)
     #print(lectures)
     files = File.objects.all()
     
+    if student.is_superuser :
+        return render(request,'courses/lectures.html',{
+        'student':student,
+        'lectures':Lecture.objects.all(),
+        'registeredLectures': lectures,
+        'files':files,
+
+        })
+
     return render(request,'courses/lectures.html',{
         'student':student,
         'lectures':Lecture.objects.filter(gradeLevel=student.level),
@@ -63,7 +72,7 @@ def regesteredlectures(request):
 
         return redirect(reverse("login"))
         
-    student = get_object_or_404(Student,id=request.user.id)
+    student = get_object_or_404(User,id=request.user.id)
     registered = RegisteredLecture.objects.filter(user=student)
     files = File.objects.all()
     print(registered)
@@ -80,7 +89,7 @@ def dashboardPage(request):
 
         return redirect(reverse("login"))
         
-    student = get_object_or_404(Student,id=request.user.id)
+    student = get_object_or_404(User,id=request.user.id)
     
     return render(request,'courses/dashboard.html',{
         'student':student,
@@ -94,7 +103,7 @@ def editProfilePage(request):
 
         return redirect(reverse("login"))
         
-    student = get_object_or_404(Student,id=request.user.id)
+    student = get_object_or_404(User,id=request.user.id)
 
     if request.method == "POST":
 
@@ -212,7 +221,7 @@ def contactUsPage(request):
     student = get_object_or_404(Student,id=request.user.id)
 
     if request.method == "POST":
-        userName = request.POST['name']
+        userName = request.POST.get('name')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         subject = request.POST.get('subject')

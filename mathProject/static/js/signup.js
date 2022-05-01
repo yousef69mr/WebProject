@@ -186,7 +186,7 @@ $(document).ready(function(){
         $.ajax({
 
             type :'GET',
-            url : "/getStudents",
+            url : "/getUsers",
             success: function(response){
                 
                 for(var key in response.students){
@@ -194,7 +194,8 @@ $(document).ready(function(){
                         //console.log(response.students[key]);
                         email.classList.add('error');
                         emailmessage.textContent = "This Email already exists";
-                    }else if(response.students[key].phone === phone.value){
+                    }else if(response.students[key].phone === phone.value && response.students[key].phone != ""){
+                        console.log(response.students[key].phone);
                         phone.classList.add('error');
                         phonemessage.textContent= "This Phone Number is used before ";
                         //console.log(response.students[key]);

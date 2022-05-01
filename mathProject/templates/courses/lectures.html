@@ -8,10 +8,10 @@
 {% block section %}   
 
     <div class="cards">
-        {% for instance in lectures %}
-            {% if instance.active %}
-                {% if instance.id in registeredLectures %}
-                    
+        {% if student.is_superuser %}
+        
+            {% for instance in lectures %}
+                  
                     <a href="{%url 'lecture' lecture_id=instance.id %}">
                         <div class="card">
                             
@@ -46,43 +46,85 @@
                             </div>
                         </div>
                     </a>
-                {%else%}
-                    
-                    <div class="card">
+            
+            {% endfor%}
+        {% else %}
+            {% for instance in lectures %}
+                {% if instance.active %}
+                    {% if instance.id in registeredLectures %}
+                        
+                        <a href="{%url 'lecture' lecture_id=instance.id %}">
+                            <div class="card">
                                 
-                        <div class="post-module">
-                            <!-- Thumbnail-->
-                            <div class="thumbnail">
-                                <div class="date">
-                                    <div class="day">{{instance.creationTime.day}}</div>
-                                    <div class="month">{{instance.creationTime|date:'M'}}</div>
-                                </div>
-                                <img src="{{instance.image.url}}" />
-                            </div><!-- Posts Content-->
-                            <div class="post-content">
-                                <div class="category">{{instance.branch}}</div>
-                                <h1 class="title">{{instance.title}}</h1>
-                                <h2 class="sub_title">{{instance.gradeLevel}}</h2>
-                                <div class="description">
-                                    <ul class="files">
-                                        {% if files %}
-                                            <label class="lecture-label" ><h4>Lecture Files :</h3></label>
-                                            {%for item in files%}
-                                                {%if item.lecture.id == instance.id and item.isActive %}
-                                                    <li>{{item.filename}}</li>
+                                <div class="post-module">
+                                    <!-- Thumbnail-->
+                                    <div class="thumbnail">
+                                        <div class="date">
+                                            <div class="day">{{instance.creationTime.day}}</div>
+                                            <div class="month">{{instance.creationTime|date:'M'}}</div>
+                                        </div>
+                                        <img src="{{instance.image.url}}" />
+                                    </div><!-- Posts Content-->
+                                    <div class="post-content">
+                                        <div class="category">{{instance.branch}}</div>
+                                        <h1 class="title">{{instance.title}}</h1>
+                                        <h2 class="sub_title">{{instance.gradeLevel}}</h2>
+                                        <div class="description">
+                                            <ul class="files">
+                                                {% if files %}
+                                                    <label class="lecture-label" ><h4>Lecture Files :</h3></label>
+                                                    {%for item in files%}
+                                                        {%if item.lecture.id == instance.id and item.isActive %}
+                                                            <a href="{{item.file.url}}" target="_blank"><li>{{item.filename}}</li></a>
+                                                        {%endif%}
+                                                    {%endfor%}
+                                                    
                                                 {%endif%}
-                                            {%endfor%}
-                                            
-                                        {%endif%}
-                                    </ul>
+                                            </ul>
+                                        </div>
+                                        <div class="post-meta"><span class="timestamp"><i class="fa fa-clock-">o</i> 6 mins ago</span><span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
+                                    </div>
                                 </div>
-                                <div class="post-meta"><span class="timestamp"><i class="fa fa-clock-">o</i> 6 mins ago</span><span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
+                            </div>
+                        </a>
+                    {%else%}
+                        
+                        <div class="card">
+                                    
+                            <div class="post-module">
+                                <!-- Thumbnail-->
+                                <div class="thumbnail">
+                                    <div class="date">
+                                        <div class="day">{{instance.creationTime.day}}</div>
+                                        <div class="month">{{instance.creationTime|date:'M'}}</div>
+                                    </div>
+                                    <img src="{{instance.image.url}}" />
+                                </div><!-- Posts Content-->
+                                <div class="post-content">
+                                    <div class="category">{{instance.branch}}</div>
+                                    <h1 class="title">{{instance.title}}</h1>
+                                    <h2 class="sub_title">{{instance.gradeLevel}}</h2>
+                                    <div class="description">
+                                        <ul class="files">
+                                            {% if files %}
+                                                <label class="lecture-label" ><h4>Lecture Files :</h3></label>
+                                                {%for item in files%}
+                                                    {%if item.lecture.id == instance.id and item.isActive %}
+                                                        <li>{{item.filename}}</li>
+                                                    {%endif%}
+                                                {%endfor%}
+                                                
+                                            {%endif%}
+                                        </ul>
+                                    </div>
+                                    <div class="post-meta"><span class="timestamp"><i class="fa fa-clock-">o</i> 6 mins ago</span><span class="comments"><i class="fa fa-comments"></i><a href="#"> 39 comments</a></span></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {%endif%}
+                    
                 {%endif%}
-                
-            {%endif%}
-        {% endfor%}
+            {% endfor%}
+        {% endif %}
     <script src="{% static 'js/courseCards.js'%}"></script>
 {% endblock section %}   

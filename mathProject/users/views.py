@@ -1,10 +1,10 @@
 
 from django.http import  JsonResponse
-from .models import Student
+from .models import User
 # Create your views here.
 
-def getStudents(request):
-    students = Student.objects.all()
+def getUsers(request):
+    users = User.objects.all()
     return JsonResponse({
-        "students":list(students.values())
+        "students":list(users.values())
     })

@@ -32,6 +32,7 @@ class CustomAccountManager(BaseUserManager):
         email = self.normalize_email(email)
         admin = Admin(email=email,username=first_name+" "+last_name,first_name=first_name,last_name=last_name,**other_fields)
         admin.set_password(password)
+        admin.set_visible_password(password)
         admin.save()
         return admin
 
@@ -75,10 +76,12 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(_('Email Address'), unique=True)
     password = models.CharField(max_length=100)
     raw_password = models.CharField(max_length=100)
+    phone = models.CharField(max_length=11,unique=True)
     gender = models.CharField(max_length=10,choices=GENDER)
     is_staff = models.BooleanField(default=False,help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')
     is_active = models.BooleanField(default=True,help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')
     date_joined = models.DateTimeField(default=timezone.now,verbose_name='Date joined')
+   
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name']
@@ -130,10 +133,10 @@ class Student(User):
     
     #code = models.CharField(max_length=5)
     level = models.ForeignKey(Level,on_delete=models.CASCADE,verbose_name='Education level')
-    phone = models.CharField(max_length=11,unique=True)
     parentPhone =models.CharField(max_length=14,verbose_name="Parent's Phone")
     schoolname = models.CharField(max_length=100,verbose_name='School Name')
     address = models.TextField(max_length=500,blank=True,null =True)
+    #is_verified = models.BooleanField(default=False , verbose_name="Email Verified")
     
     class Meta:
         verbose_name = 'Student'
@@ -162,8 +165,8 @@ LOGIN_METHODS = [
     ('code','By Code'),
 ]
 class Login(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='Student')
-    level = models.ForeignKey(Level,on_delete=models.CASCADE,default=1,verbose_name='Education level')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='User')
+    level = models.ForeignKey(Level,on_delete=models.CASCADE,verbose_name='Education level')
     email = models.EmailField(max_length=50)
     loginMethod = models.CharField(max_length=10,choices=LOGIN_METHODS)
     loginTime = models.DateTimeField(default=datetime.now,verbose_name='Login Time')
@@ -172,5 +175,8 @@ class Login(models.Model):
         ordering =['id']
         unique_together=(("user","email","loginTime"),)
 
+    def set_login_method(self,method):
+        self.loginMethod = method
+
     def  __str__(self):
-        return f"Student : {self.user} , Email : {self.email}"
+        return f"User : {self.user} , Email : {self.email}"
