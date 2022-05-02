@@ -28,7 +28,7 @@
       <div class="logo-details">
         <i class='bx bxl-c-plus-plus icon'></i>
           <div class="logo_name">Math Platform</div>
-          <i class='bx bx-menu' id="btn" ></i>
+        <i class='bx bx-menu' id="btn" ></i>
       </div>
       <ul class="nav-list">
         <li>
@@ -39,7 +39,8 @@
         {% if student.is_staff %}
           <li>
             <a href="../../admin">
-              <i class='bx bx-grid-alt'></i>
+              <box-icon name='sitemap'></box-icon>
+              <i class='bx bx-sitemap'></i>
               <span class="links_name">Admin Panel</span>
             </a>
             <span class="tooltip">Admin Panel</span>
@@ -68,21 +69,21 @@
         </li>
         <li>
           <a href="{%url 'lectures' %}">
-            <i class='bx bx-pie-chart-alt-2' ></i>
+            <i class='bx bx-book-bookmark' ></i>
             <span class="links_name">Lectures</span>
           </a>
           <span class="tooltip">Lectures</span>
         </li>
         <li>
           <a href="{%url 'regesteredlectures' %}">
-            <i class='bx bx-folder' ></i>
+            <i class='bx bx-book-open' ></i>
             <span class="links_name">My Lectures</span>
           </a>
           <span class="tooltip">My Lectures</span>
         </li>
         <li>
           <a href="{%url 'contactus'  %}">
-            <i class='bx bx-cart-alt' ></i>
+            <i class='bx bx-phone-call' ></i>
             <span class="links_name">Contact Us</span>
           </a>
           <span class="tooltip">Contact Us</span>
@@ -105,8 +106,8 @@
             <div class="profile-details">
               <img src="{% static 'img/avatar.svg'%}" alt="profileImg">
               <div class="name_job">
-                <div class="name">{{student.first_name}}</div>
-                <div class="code">Code : #{{student.id}}</div>
+                <div class="name">{{student.first_name|title}}</div>
+                <div class="code">Code : <span id="hash">#</span><span id="id">{{student.id}}</span></div>
               </div>
             </div>
             <a href="{%url 'logout'%}">

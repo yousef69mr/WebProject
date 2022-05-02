@@ -205,6 +205,15 @@
 .sidebar li.profile .code{
   font-size: 12px;
 }
+
+.sidebar li.profile .code #hash{
+  color: rgb(0, 161, 0);
+}
+
+.sidebar li.profile .code #id{
+  color: rgb(237, 39, 32);
+}
+
 .sidebar .profile #log_out{
   position: absolute;
   top: 50%;

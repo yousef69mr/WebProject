@@ -25,9 +25,13 @@
                 <p class="title">Welcome back</p>
                 <div class="separator"></div>
                 <p class="welcome-message">Please, provide login credential to proceed and have access to all our services</p>
-                {%if errorMessage %}
-                    <div class="error-message">
-                        <p>{{errorMessage}}</p>
+                {%if message %}
+                    <div class="alert {{alertType}}"> 
+                        {{message}}
+                        {%if alertType == "alert-success"%}
+                            <br>
+                            Your Code : <span>{{code}}</span>
+                        {%endif%}
                     </div>
                 {%endif%}
                 <form action="{%url 'login'%}" method="POST" class="login-form">

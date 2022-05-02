@@ -1,11 +1,8 @@
 
-
-
-
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse 
 from users.models import Student,Login,User
+from users.views import send_activation_email
 from pages.models import Level,Message
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -77,12 +74,15 @@ def existPhone(phone):
 """
 
 def existUserByEmail(mail,password):
-    users = User.objects.all()
-
-    for user in users:
-        if user.email.lower() == mail.lower() and user.check_password(password) :
+    try:
+        user = User.objects.get(email= mail.lower())
+        if user.check_password(password) :
             print('account found by email')
+
             return True
+        
+    except:
+        return False
 
     return False
 
@@ -105,7 +105,7 @@ def existUserByCode(code,password):
 def loginPage(request):
     if request.method == "POST":
 
-        mail = request.POST['email']
+        mail = request.POST.get('email')
         password = request.POST.get('password')
 
         print(mail)
@@ -124,18 +124,29 @@ def loginPage(request):
                 if user == None:
                     return render(request, 'pages/signin.html', {
 
-                    "errorMessage": "No Such User is created"
+                    "message":"No Such User is created",
+                    "alertType":"alert-danger",
                 })
 
                 if not user.is_active:
                     return render(request, 'pages/signin.html', {
 
-                        "errorMessage": "This User is not activated please contact the Administrator"
+                        "message": "This User is not activated ... please contact the Administrator",
+                        "alertType":"alert-danger",
+                    })
+
+
+                if not user.is_verified:
+                    return render(request, 'pages/signin.html', {
+
+                        "message": "This User is not Verified ... please check your email inbox ",
+                        "alertType":"alert-danger",
                     })
 
                 loginObject = Login(user=user,email=user.email)
                 
                 loginObject.set_login_method('email')
+
                 print("here")
                 #loginObject.save()
 
@@ -146,7 +157,8 @@ def loginPage(request):
                 
             except:
                 return render(request, 'pages/signin.html', {
-                    "errorMessage": "An Error Occured ... Try Again Later"
+                    "message": "An Error Occured ... Try Again Later",
+                    "alertType":"alert-danger",
                 })
            
         elif existUserByCode(mail,password):
@@ -158,7 +170,8 @@ def loginPage(request):
 
                     return render(request, 'pages/signin.html', {
 
-                    "errorMessage": "No Such Student is created"
+                        "message":"No Such User is created",
+                        "alertType":"alert-danger",
 
                     })
 
@@ -167,12 +180,21 @@ def loginPage(request):
                 if user == None:
                     return render(request, 'pages/signin.html', {
 
-                    "errorMessage": "No Such Student is created"
+                    "message":"No Such User is created",
+                    "alertType":"alert-danger",
                 })
 
+                if not user.is_verified:
+                    return render(request, 'pages/signin.html', {
+
+                        "message": "This User is not Verified ... please check your email inbox ",
+                        "alertType":"alert-danger",
+                    })
 
                 loginObject = Login(user=user,email=user.email)
-                loginObject.save()
+                loginObject.set_login_method('code')
+
+                #loginObject.save()
 
                 login(request,user)
 
@@ -180,18 +202,23 @@ def loginPage(request):
                 
             except:
                 return render(request, 'pages/signin.html', {
-                    "errorMessage": "An Error Occured ... Try Again Later"
+                    "message": "An Error Occured ... Try Again Later",
+                    "alertType":"alert-danger",
                 })
            
         else:
 
             return render(request, 'pages/signin.html', {
-                "errorMessage": "Email or Code or password or both are  incorrect "
+                "message": "Email or Code or password or both are  incorrect ",
+                "alertType":"alert-danger",
             })
             
 
         
-    return render(request,'pages/signin.html')
+    return render(request,'pages/signin.html',{
+        "message":"",
+        "alertType":"",
+    })
 
 
 def signupPage(request):
@@ -259,13 +286,16 @@ def signupPage(request):
             student.set_password(Pass)
             
             student.save()
-            
 
+            #print("here")
+            send_activation_email(student,request)
+            #print("here")
             messages.success(request,"User is created successfully")
             print("Success")
             return render(request,'pages/signUp.html',{
                 "levels":levels,
-                "message":"User is created successfully ",
+                "message":"User is created successfully But Not verified yet :(",
+                "subMessage":"So, Check your email inbox and click the Verification link",
                 "code":student.id,
                 "alertType":"alert-success",
 

@@ -1,11 +1,11 @@
 
 from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import redirect, render,HttpResponseRedirect,get_object_or_404
+from django.shortcuts import redirect, render,get_object_or_404
 from django.urls import reverse
-from django.contrib.auth import logout
 
-from users.models import Student,User
+
+from users.models import Student,User,Admin
 from .models import File, Lecture,RegisteredLecture
 from pages.models import Message,Level
 # Create your views here.
@@ -102,8 +102,14 @@ def editProfilePage(request):
     if not request.user.is_authenticated:
 
         return redirect(reverse("login"))
+    
+    try:
         
-    student = get_object_or_404(User,id=request.user.id)
+        student = get_object_or_404(Student,id=request.user.id)
+    except:
+        student = get_object_or_404(Admin,id=request.user.id)
+
+    print(student)
 
     if request.method == "POST":
 
@@ -141,21 +147,36 @@ def editProfilePage(request):
 
             #print("here")
 
-            levelObject = Level.objects.get(levelCode=level)
-            Student.objects.filter(id=request.user.id).update(
-                username=fname+" "+lname,
-                last_name=lname,
-                first_name=fname,
-                email=mail.lower(),
-                #raw_password=Pass,
-                phone=phone,
-                gender=gender,
-                parentPhone=parentphone,
-                level=levelObject,
-                address=address,
-                schoolname=schoolName
-            )
+            try:
 
+                levelObject = Level.objects.get(levelCode=level)
+
+                Student.objects.filter(id=request.user.id).update(
+                    username=fname+" "+lname,
+                    last_name=lname,
+                    first_name=fname,
+                    email=mail.lower(),
+                    #raw_password=Pass,
+                    phone=phone,
+                    gender=gender,
+                    parentPhone=parentphone,
+                    level=levelObject,
+                    address=address,
+                    schoolname=schoolName
+                )
+
+            except:
+                
+                Admin.objects.filter(id=request.user.id).update(
+                    username=fname+" "+lname,
+                    last_name=lname,
+                    first_name=fname,
+                    email=mail.lower(),
+                    #raw_password=Pass,
+                    phone=phone,
+                    gender=gender,
+                )
+                
             print("I'm here")
 
             """
@@ -254,7 +275,3 @@ def contactUsPage(request):
         'student':student,
     })
 
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))

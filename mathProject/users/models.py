@@ -15,12 +15,16 @@ class CustomAccountManager(BaseUserManager):
         other_fields.setdefault('is_staff',True)
         other_fields.setdefault('is_superuser',True)
         other_fields.setdefault('is_active',True)
+        other_fields.setdefault('is_verified',True)
 
         if other_fields.get('is_staff') is not True:
             raise ValueError('Superuser must be assigned to is_staff=True.')
 
         if other_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must be assigned to is_superuser=True.')
+
+        if other_fields.get('is_verified') is not True:
+            raise ValueError('Superuser must be assigned to is_verified=True.')
 
         return self.create_admin(email,first_name,last_name,password,**other_fields)
 
@@ -81,7 +85,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_staff = models.BooleanField(default=False,help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')
     is_active = models.BooleanField(default=True,help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')
     date_joined = models.DateTimeField(default=timezone.now,verbose_name='Date joined')
-   
+    is_verified = models.BooleanField(default=False , verbose_name="Email Verified")
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name']
@@ -136,7 +140,7 @@ class Student(User):
     parentPhone =models.CharField(max_length=14,verbose_name="Parent's Phone")
     schoolname = models.CharField(max_length=100,verbose_name='School Name')
     address = models.TextField(max_length=500,blank=True,null =True)
-    #is_verified = models.BooleanField(default=False , verbose_name="Email Verified")
+    
     
     class Meta:
         verbose_name = 'Student'

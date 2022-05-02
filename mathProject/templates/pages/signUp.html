@@ -17,8 +17,10 @@
           <div class="alert {{alertType}}"> 
             {{message}}
             {%if alertType == "alert-success"%}
-            <br>
-            Your Code : <span>{{code}}</span>
+              <br>
+              {{subMessage}}
+              <br>
+              Your Code : <span>{{code}}</span>
             {%endif%}
           </div>
         {%endif%}

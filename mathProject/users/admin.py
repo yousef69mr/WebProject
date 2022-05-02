@@ -27,7 +27,7 @@ class StudentAdmin(admin.ModelAdmin):
             'fields':('phone','parentPhone')
         }),
         ('Permissions',{
-            'fields':('is_active','is_staff','is_superuser')
+            'fields':('is_active','is_staff','is_superuser','is_verified')
         }),
         ('Important Dates',{
             'fields':('last_login','date_joined')
@@ -50,7 +50,7 @@ class LoginAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Student,StudentAdmin)
-admin.site.register(User)
+admin.site.register(User,UserAdmin)
 admin.site.register(Admin,UserAdmin)
 admin.site.register(Login,LoginAdmin)
 
