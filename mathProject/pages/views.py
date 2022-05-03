@@ -72,6 +72,19 @@ def existPhone(phone):
     return False
 
 """
+def existUserByUsername(username,password):
+    try:
+        user = User.objects.get(username= username)
+        if user.check_password(password) :
+            print('account found by Username')
+
+            return True
+        
+    except:
+        return False
+
+    return False
+
 
 def existUserByEmail(mail,password):
     try:
@@ -105,21 +118,77 @@ def existUserByCode(code,password):
 def loginPage(request):
     if request.method == "POST":
 
-        mail = request.POST.get('email')
+        input = request.POST.get('email')
         password = request.POST.get('password')
 
-        print(mail)
+        print(input)
         print(password)
         #student = get_object_or_404(Student,email=mail.lower())
        
+        if existUserByUsername(input,password):
+            
+            try:
+                #student = get_object_or_404(Student,email=mail.lower())
+                givenUser = get_object_or_404(User,username=input)
+                
+                if givenUser == None:
+
+                    return render(request, 'pages/signin.html', {
+
+                        "message":"No Such User is created",
+                        "alertType":"alert-danger",
+
+                    })
+
+                
+                user = authenticate(request,username=givenUser.email,password=password)
+                print(user)
+                if user == None:
+                    return render(request, 'pages/signin.html', {
+
+                    "message":"No Such User is created",
+                    "alertType":"alert-danger",
+                })
+
+                if not user.is_active:
+                    return render(request, 'pages/signin.html', {
+
+                        "message": "This User is not activated ... please contact the Administrator",
+                        "alertType":"alert-danger",
+                    })
 
 
-        if existUserByEmail(mail,password):
+                if not user.is_verified:
+                    return render(request, 'pages/signin.html', {
+
+                        "message": "This User is not Verified ... please check your email inbox ",
+                        "alertType":"alert-danger",
+                    })
+
+                loginObject = Login(user=user,email=user.email)
+                
+                loginObject.set_login_method('username')
+
+                print("here")
+                #loginObject.save()
+
+                print(loginObject)
+                login(request,user)
+
+                return redirect(reverse("dashboard"))
+                
+            except:
+                return render(request, 'pages/signin.html', {
+                    "message": "An Error Occured ... Try Again Later",
+                    "alertType":"alert-danger",
+                })
+           
+        elif existUserByEmail(input,password):
             
             try:
                 #student = get_object_or_404(Student,email=mail.lower())
                 
-                user = authenticate(request,username=mail.lower(),password=password)
+                user = authenticate(request,username=input.lower(),password=password)
                 print(user)
                 if user == None:
                     return render(request, 'pages/signin.html', {
@@ -161,10 +230,10 @@ def loginPage(request):
                     "alertType":"alert-danger",
                 })
            
-        elif existUserByCode(mail,password):
+        elif existUserByCode(input,password):
 
             try:
-                givenUser = get_object_or_404(User,id=mail)
+                givenUser = get_object_or_404(User,id=input)
                 
                 if givenUser == None:
 
@@ -175,7 +244,7 @@ def loginPage(request):
 
                     })
 
-                user = authenticate(request,username=givenUser.email.lower(),password=password)
+                user = authenticate(request,username=givenUser.email,password=password)
                 #print(student)
                 if user == None:
                     return render(request, 'pages/signin.html', {
@@ -225,9 +294,10 @@ def signupPage(request):
     levels=Level.objects.all()
 
     if request.method == "POST":
-
-        fname = request.POST['f-name']
-        lname = request.POST['l-name']
+        
+        username = request.POST.get('username')
+        fname = request.POST.get('f-name')
+        lname = request.POST.get('l-name')
         Pass = request.POST.get('password')
         Pass2 = request.POST.get('confirmPassword')
         mail = request.POST.get('email')
@@ -239,6 +309,7 @@ def signupPage(request):
         address = request.POST.get('address')
 
         
+        print(username)
         print(fname)
         print(lname)
 
@@ -271,7 +342,8 @@ def signupPage(request):
             #student = CustomAccountManager.create_student(request,mail,fname,lname,Pass,phone,parentphone,gender,levelObject,address,schoolName)
             
             student = Student(
-                username=fname+" "+lname,
+                username=username,
+                full_name=fname+" "+lname,
                 last_name=lname,
                 first_name=fname,
                 email=mail.lower(),
@@ -294,9 +366,8 @@ def signupPage(request):
             print("Success")
             return render(request,'pages/signUp.html',{
                 "levels":levels,
-                "message":"User is created successfully But Not verified yet :(",
-                "subMessage":"So, Check your email inbox and click the Verification link",
-                "code":student.id,
+                "message":"User is created successfully But Not verified yet  :(",
+                "subMessage":"So, Check your email inbox and click the Verification link .. Please  :)",
                 "alertType":"alert-success",
 
             })

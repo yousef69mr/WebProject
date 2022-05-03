@@ -1,9 +1,10 @@
 
+
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.urls import reverse
-
+from django.contrib.auth import authenticate, login
 
 from users.models import Student,User,Admin
 from .models import File, Lecture,RegisteredLecture
@@ -103,16 +104,20 @@ def editProfilePage(request):
 
         return redirect(reverse("login"))
     
+   
     try:
         
-        student = get_object_or_404(Student,id=request.user.id)
+        user = get_object_or_404(Student,id=request.user.id)
+        print(user)
     except:
-        student = get_object_or_404(Admin,id=request.user.id)
+        user = get_object_or_404(Admin,id=request.user.id)
+        print(user)
 
-    print(student)
-
+    print(user.username)
+    
     if request.method == "POST":
 
+        username = request.POST.get('username')
         fname = request.POST.get('f-name')
         lname = request.POST.get('l-name')
         Pass = request.POST.get('password')
@@ -138,21 +143,25 @@ def editProfilePage(request):
         print(schoolName)
         print(address)
 
+        if Pass != Pass2 :
+            return render(request, 'courses/editProfile.html', {
+                "levels":levels,
+                "message":"Two Passwords don't match",
+                "alertType":"alert-danger",
+                'student':user,
+
+            })
+
         try:
-
-            student.set_visible_password(Pass)
-            student.set_password(Pass)
-            
-            student.save()
-
+      
             #print("here")
-
-            try:
-
+            if hasattr(user,'level'):
+  
                 levelObject = Level.objects.get(levelCode=level)
 
                 Student.objects.filter(id=request.user.id).update(
-                    username=fname+" "+lname,
+                    username = username,
+                    full_name=fname+" "+lname,
                     last_name=lname,
                     first_name=fname,
                     email=mail.lower(),
@@ -165,10 +174,11 @@ def editProfilePage(request):
                     schoolname=schoolName
                 )
 
-            except:
+            else:
                 
                 Admin.objects.filter(id=request.user.id).update(
-                    username=fname+" "+lname,
+                    username = username,
+                    full_name=fname+" "+lname,
                     last_name=lname,
                     first_name=fname,
                     email=mail.lower(),
@@ -176,9 +186,15 @@ def editProfilePage(request):
                     phone=phone,
                     gender=gender,
                 )
-                
-            print("I'm here")
 
+                
+            user.set_visible_password(Pass)
+            user.set_password(Pass)
+            
+            user.save()
+            print(user.email)
+            updatedUser = authenticate(request,username=user.email,password=Pass)
+            login(request,updatedUser)
             """
             student.set_first_name(fname)
             
@@ -209,7 +225,7 @@ def editProfilePage(request):
             "levels":levels,
             "message":"User's Data is updated successfully ",
             "alertType":"alert-success",
-            'student':student,
+            'student':updatedUser,
         })
 
         except:
@@ -218,7 +234,7 @@ def editProfilePage(request):
                 "levels":levels,
                 "message":"An Error Occured during Registeration",
                 "alertType":"alert-danger",
-                'student':student,
+                'student':user,
 
             })
         
@@ -227,7 +243,7 @@ def editProfilePage(request):
         "levels":levels,
         "message":"",
         "alertType":"",
-        'student':student,
+        'student':user,
     })
 
 

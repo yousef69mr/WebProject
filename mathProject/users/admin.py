@@ -1,24 +1,52 @@
 from django.contrib import admin
 from .models import Student,Admin,User,Login
 from django.contrib.auth.admin import UserAdmin
-from .forms import AdminUserChangeForm ,AdminUserCreationForm
 
 # Register your models here.
 
-class StudentAdmin(admin.ModelAdmin):
+class allUsersAdmin(UserAdmin):
+    model = User
+    list_display= ['id','username','email','phone','gender','is_active','is_verified']
+    list_display_links= []
+    #list_editable =['gender']
+    search_fields=['phone','username','email']
+    list_filter = ['gender','is_active','is_verified']
+
+    fieldsets = [
+
+        ('Authentication Info',{
+            'fields':('username','email','password','raw_password')
+        }),
+        ('Personal info',{
+            'fields':('full_name','first_name','last_name','gender')
+        }),
+        ('Contact info',{
+            'fields':('phone',)
+        }),
+        ('Permissions',{
+            'fields':('is_active','is_staff','is_superuser','is_verified')
+        }),
+        ('Important Dates',{
+            'fields':('last_login','date_joined')
+        }),
+       
+    ]
+
+
+class StudentAdmin(UserAdmin):
     model = Student
-    list_display= ['id','username','email','phone','gender','level']
+    list_display= ['id','username','email','phone','gender','level','is_active','is_verified']
     list_display_links= ['username','level','email']
     list_editable =['gender']
-    search_fields=['phone']
-    list_filter = ['gender','level']
+    search_fields=['phone','username','email']
+    list_filter = ['gender','level','is_active','is_verified']
 
     fieldsets = [
         ('Authentication Info',{
-            'fields':('email','password','raw_password')
+            'fields':('username','email','password','raw_password')
         }),
         ('Personal info',{
-            'fields':('username','first_name','last_name','gender','address')
+            'fields':('full_name','first_name','last_name','gender','address')
         }),
         ('Education info',{
             'fields':('level','schoolname')
@@ -34,10 +62,36 @@ class StudentAdmin(admin.ModelAdmin):
         }),
     ]
 
-    form = AdminUserChangeForm
-    add_form = AdminUserCreationForm()
+   
 
+class adminAdmin(UserAdmin):
+    
+    model = Admin
+    list_display= ['id','username','email','phone','gender','is_active','is_verified']
+    list_display_links= ['username','email']
+    #list_editable =['gender']
+    search_fields=['phone','username','email']
+    list_filter = ['gender','is_active','is_verified']
 
+    fieldsets = [
+
+        ('Authentication Info',{
+            'fields':('username','email','password','raw_password')
+        }),
+        ('Personal info',{
+            'fields':('full_name','first_name','last_name','gender')
+        }),
+        ('Contact info',{
+            'fields':('phone',)
+        }),
+        ('Permissions',{
+            'fields':('is_active','is_staff','is_superuser','is_verified')
+        }),
+        ('Important Dates',{
+            'fields':('last_login','date_joined')
+        }),
+       
+    ]
 
 class LoginAdmin(admin.ModelAdmin):
     model = Login
@@ -48,10 +102,9 @@ class LoginAdmin(admin.ModelAdmin):
 
 
 
-
 admin.site.register(Student,StudentAdmin)
-admin.site.register(User,UserAdmin)
-admin.site.register(Admin,UserAdmin)
+admin.site.register(User,allUsersAdmin)
+admin.site.register(Admin,adminAdmin)
 admin.site.register(Login,LoginAdmin)
 
 

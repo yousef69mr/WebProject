@@ -16,11 +16,10 @@
         {%if message %}
           <div class="alert {{alertType}}"> 
             {{message}}
-            {%if alertType == "alert-success"%}
+            {%if alertType == "alert-success" %}
               <br>
               {{subMessage}}
-              <br>
-              Your Code : <span>{{code}}</span>
+              
             {%endif%}
           </div>
         {%endif%}
@@ -29,6 +28,15 @@
         </div>
         <form action="{%url 'signup'%}" method="POST" class="form">
           {% csrf_token %}
+          <div class="inputfield">
+            <label>
+              Username 
+              <span>*</span>
+            </label>
+            
+            <input type="text" name="username" class="input" minlength=4  maxlength=100 required />
+            <p id="username-error" class="error-message"></p>
+          </div>  
           <div class="inputfield">
             <label>
               First Name 

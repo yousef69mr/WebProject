@@ -1,3 +1,6 @@
+const username = document.querySelector('input[name="username"]')
+const usernamemessage = document.querySelector('#username-error')
+/*****************************************************/
 const fname = document.querySelector('input[name="f-name"]')
 const fnamemessage = document.querySelector('#fname-error')
 /*****************************************************/
@@ -36,6 +39,20 @@ const inputElements = form.querySelectorAll("input, select, checkbox, textarea")
 
 
 console.log(level,gender,address)
+
+username.addEventListener('input',(e)=>{
+    if(e.target.value.length < 4 || e.target.value.length>100){
+        username.classList.add('error')
+        usernamemessage.textContent = "name must be longer"
+        //submitbtn.disabled = true;
+    }else{
+        username.classList.remove('error')
+        usernamemessage.textContent = ""
+        //submitbtn.disabled = false;
+
+    }
+});
+
 
 fname.addEventListener('input',(e)=>{
     if(e.target.value.length < 8){
@@ -190,7 +207,10 @@ $(document).ready(function(){
             success: function(response){
                 
                 for(var key in response.students){
-                    if(response.students[key].email.toLowerCase() === email.value.toLowerCase()){
+                    if(response.students[key].username.toLowerCase() === username.value.toLowerCase()){
+                        username.classList.add('error');
+                        usernamemessage.textContent = "This Username already exists";  
+                    }else if(response.students[key].email.toLowerCase() === email.value.toLowerCase()){
                         //console.log(response.students[key]);
                         email.classList.add('error');
                         emailmessage.textContent = "This Email already exists";
@@ -254,6 +274,7 @@ function revealPassword(){
 /* hide and visible of password */
 
 function revealconfirmPassword(){
+    
 	var x=document.querySelector("input[name='confirmPassword']");
 	var y=document.getElementById("hide3");
 	var z=document.getElementById("hide4");

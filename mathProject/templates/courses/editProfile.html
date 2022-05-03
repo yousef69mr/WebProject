@@ -30,6 +30,16 @@
                         {% csrf_token %}
                         <div class="inputfield">
                             <label>
+                                Username 
+                                <span>*</span>
+                            </label>
+                            
+                            <input type="hidden" name="defaultUsernameValue" value="{{student.username}}" class="input" required/>
+                            <input type="text" name="username" class="input" value="{{student.username}}" minlength=4  maxlength=150 required disabled/>
+                            <p id="username-error" class="error-message"></p>
+                        </div>  
+                        <div class="inputfield">
+                            <label>
                                 First Name 
                                 <span>*</span>
                             </label>
@@ -112,6 +122,16 @@
                 {%else%}
                     <form action="{%url 'editProfile'%}" method="POST" class="form">
                         {% csrf_token %}
+                        <div class="inputfield">
+                            <label>
+                                Username 
+                                <span>*</span>
+                            </label>
+                            
+                            <input type="hidden" name="defaultUsernameValue" value="{{student.username}}" class="input" required/>
+                            <input type="text" name="username" class="input" value="{{student.username}}" minlength=4  maxlength=150 required disabled/>
+                            <p id="username-error" class="error-message"></p>
+                        </div>  
                         <div class="inputfield">
                             <label>
                                 First Name 

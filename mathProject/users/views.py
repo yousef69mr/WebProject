@@ -40,8 +40,7 @@ def send_activation_email(user,request):
         'uid': urlsafe_base64_encode(force_bytes(user.id)),
         'token':generate_token.make_token(user),
     })
-    print("Wrong")
-    print("send action email")
+    
     print(email_body)
     print(user.email)
     print(settings.EMAIL_FROM_USER)
@@ -52,10 +51,9 @@ def send_activation_email(user,request):
         to=[user.email],
         )
 
-    print(email_message.send())
     email_message.send()
 
-    print('email sent')
+    
     
 
 def activate_user(request,uidb64,token):

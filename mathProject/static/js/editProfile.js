@@ -1,5 +1,9 @@
 const editbtn = document.querySelector('#edit-btn')
 /*****************************************************/
+const username = document.querySelector('input[name="username"]')
+const usernameDefault = document.querySelector('input[name="defaultUsernameValue"]')
+const usernamemessage = document.querySelector('#username-error')
+/*****************************************************/
 const fname = document.querySelector('input[name="f-name"]')
 const fnamemessage = document.querySelector('#fname-error')
 /*****************************************************/
@@ -62,11 +66,16 @@ editbtn.addEventListener('click',()=>{
                     success: function(response){
                         
                         for(var key in response.students){
+                            if(response.students[key].username.toLowerCase() === username.value.toLowerCase() && usernameDefault.value.toLowerCase()!==response.students[key].username.toLowerCase()){
+                                username.classList.add('error');
+                                usernamemessage.textContent = "This Username already exists";  
+                            }
                             if(response.students[key].email.toLowerCase() === email.value.toLowerCase() && emailDefault.value.toLowerCase() !== response.students[key].email.toLowerCase()){
                                 //console.log(response.students[key]);
                                 email.classList.add('error');
                                 emailmessage.textContent = "This Email already exists";
-                            }else if(response.students[key].phone === phone.value && response.users[key].phone != "" && phoneDefault.value.toLowerCase() !== response.students[key].phone.toLowerCase()){
+                            }
+                            if(response.students[key].phone === phone.value && response.users[key].phone != "" && phoneDefault.value !== response.students[key].phone){
                                 phone.classList.add('error');
                                 phonemessage.textContent= "This Phone Number is used before ";
                                 //console.log(response.students[key]);
@@ -83,7 +92,7 @@ editbtn.addEventListener('click',()=>{
                 submitbtn.disabled = false;
                 
 
-                console.log(inputElements);
+                //console.log(inputElements);
 
                 for(var key in inputElements){
                     console.log(inputElements[key]);
@@ -108,6 +117,19 @@ editbtn.addEventListener('click',()=>{
     }
 });
 
+
+username.addEventListener('input',(e)=>{
+    if(e.target.value.length < 4 || e.target.value.length>100){
+        username.classList.add('error')
+        usernamemessage.textContent = "name must be longer"
+        //submitbtn.disabled = true;
+    }else{
+        username.classList.remove('error')
+        usernamemessage.textContent = ""
+        //submitbtn.disabled = false;
+
+    }
+});
 
 
 fname.addEventListener('input',(e)=>{
