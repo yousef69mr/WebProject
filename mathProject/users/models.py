@@ -1,11 +1,18 @@
+import os ,sys 
 
+from django.conf import settings
+from django.core.files.storage import default_storage
 
+from courses.validators import validate_image_file_extension
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
+
 from pages.models import Level
 from datetime import datetime
+
+
 # Create your models here.
 
 
@@ -70,10 +77,12 @@ GENDER=[
 ]
 
 
+
 #AbstractUser._meta.get_field('email')._unique = True
 
 class User(AbstractBaseUser,PermissionsMixin):
     
+    profile_image = models.ImageField(default="media/defaults/avatar.svg",upload_to='media/profile_images/%y/%m/%d', validators=[validate_image_file_extension],null=True)
     username = models.CharField(max_length=150,error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',unique=True)
     full_name = models.CharField(max_length=200,help_text='Required. 200 characters or fewer. Letters, digits and @/./+/-/_ only.',verbose_name="Full Name")
     first_name = models.CharField(max_length=100)
@@ -97,6 +106,62 @@ class User(AbstractBaseUser,PermissionsMixin):
         ordering=['id']
 
     objects = CustomAccountManager()
+
+    def set_profile_image(self,image):
+        #print(os.path.getsize(image))
+        #print(image.size)
+        #print(type(image))
+        
+       
+        extenstion = os.path.splitext(image.name)
+        print(extenstion)
+        file_name = str(self.id) + extenstion[1]
+        print(file_name)
+       
+
+        now = datetime.now()
+        y = now.strftime("%y")
+        m = now.strftime("%m")
+        d = now.strftime("%d")
+        image_directory= os.path.join('media\\profile_images\\'+str(y)+'\\'+str(m)+'\\'+str(d)+'\\')
+        image_url= os.path.join('media/profile_images/'+str(y)+'/'+str(m)+'/'+str(d)+'/',file_name)
+
+        print(image_directory)
+        full_image_directory = os.path.join(settings.MEDIA_ROOT,image_directory)
+
+        try:
+            os.makedirs(full_image_directory, exist_ok = True)
+            print("Directory '%s' created successfully" % image_directory)
+        except OSError as error:
+            print("Directory '%s' can not be created" % image_directory)
+  
+        image_path = os.path.join(full_image_directory,file_name)
+        #print(image_path)
+        print(os.getcwd())
+        os.chdir(str(full_image_directory))
+        print(os.getcwd())
+        #targetFile = os.path.join(path, image)
+        print(image_path)
+
+        ###################################
+       
+        with open(default_storage.path(image_path),'wb+') as destination:
+            print("write")
+            for chunk in image.chunks() :
+                destination.write(chunk)
+
+       
+        self.profile_image = image_url
+        
+        
+        print(self.profile_image)
+       
+        self.save()
+
+        
+        #print(self.profile_image.path)
+        #print(self.profile_image.url)
+        
 
     def set_first_name(self,first_name):
         self.first_name = first_name

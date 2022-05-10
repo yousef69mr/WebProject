@@ -18,7 +18,7 @@ class allUsersAdmin(UserAdmin):
             'fields':('username','email','password','raw_password')
         }),
         ('Personal info',{
-            'fields':('full_name','first_name','last_name','gender')
+            'fields':('profile_image','full_name','first_name','last_name','gender')
         }),
         ('Contact info',{
             'fields':('phone',)
@@ -46,7 +46,7 @@ class StudentAdmin(UserAdmin):
             'fields':('username','email','password','raw_password')
         }),
         ('Personal info',{
-            'fields':('full_name','first_name','last_name','gender','address')
+            'fields':('profile_image','full_name','first_name','last_name','gender','address')
         }),
         ('Education info',{
             'fields':('level','schoolname')
@@ -79,7 +79,7 @@ class adminAdmin(UserAdmin):
             'fields':('username','email','password','raw_password')
         }),
         ('Personal info',{
-            'fields':('full_name','first_name','last_name','gender')
+            'fields':('profile_image','full_name','first_name','last_name','gender')
         }),
         ('Contact info',{
             'fields':('phone',)
@@ -106,5 +106,6 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(User,allUsersAdmin)
 admin.site.register(Admin,adminAdmin)
 admin.site.register(Login,LoginAdmin)
+
 
 

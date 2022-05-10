@@ -74,13 +74,15 @@
           </a>
           <span class="tooltip">Lectures</span>
         </li>
-        <li>
-          <a href="{%url 'regesteredlectures' %}">
-            <i class='bx bx-book-open' ></i>
-            <span class="links_name">My Lectures</span>
-          </a>
-          <span class="tooltip">My Lectures</span>
-        </li>
+        {% if not student.is_staff %}
+          <li>
+            <a href="{%url 'regesteredlectures' %}">
+              <i class='bx bx-book-open' ></i>
+              <span class="links_name">My Lectures</span>
+            </a>
+            <span class="tooltip">My Lectures</span>
+          </li>
+        {%endif%}
         <li>
           <a href="{%url 'contactus'  %}">
             <i class='bx bx-phone-call' ></i>
@@ -104,7 +106,7 @@
         </li>
         <li class="profile">
             <div class="profile-details">
-              <img src="{% static 'img/avatar.svg'%}" alt="profileImg">
+              <img src="{{student.profile_image.url}}" alt="profileImg">
               <div class="name_job">
                 <div class="name">{{student.first_name|title}}</div>
                 <div class="code">Code : <span id="hash">#</span><span id="id">{{student.id}}</span></div>

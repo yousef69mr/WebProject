@@ -117,6 +117,7 @@ def editProfilePage(request):
     
     if request.method == "POST":
 
+        profileImage = request.FILES.get('profile_image')
         username = request.POST.get('username')
         fname = request.POST.get('f-name')
         lname = request.POST.get('l-name')
@@ -129,7 +130,11 @@ def editProfilePage(request):
         level = request.POST.get('level')
         schoolName  = request.POST.get('school-name')
         address = request.POST.get('address')
+        print(profileImage)
 
+        
+
+        print(profileImage)
         print(fname)
         print(lname)
 
@@ -190,6 +195,8 @@ def editProfilePage(request):
                 
             user.set_visible_password(Pass)
             user.set_password(Pass)
+            if profileImage:
+                user.set_profile_image(profileImage)
             
             user.save()
             print(user.email)

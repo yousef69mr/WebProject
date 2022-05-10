@@ -26,8 +26,16 @@
                     </div>
                 </div>
                 {% if student.is_superuser%}
-                    <form action="{%url 'editProfile'%}" method="POST" class="form">
+                    <form action="{%url 'editProfile'%}" enctype="multipart/form-data" method="POST" class="form">
                         {% csrf_token %}
+                        <div class="inputfield">
+                            <label>
+                                Profile Image 
+                            </label>
+                            
+                            <input type="file" name="profile_image" class="input" disabled/>
+                            <p id="username-error" class="error-message"></p>
+                        </div>  
                         <div class="inputfield">
                             <label>
                                 Username 
@@ -120,8 +128,16 @@
                         
                     </form>
                 {%else%}
-                    <form action="{%url 'editProfile'%}" method="POST" class="form">
+                    <form action="{%url 'editProfile'%}" enctype="multipart/form-data" method="POST" class="form">
                         {% csrf_token %}
+                        <div class="inputfield">
+                            <label>
+                                Profile Image 
+                            </label>
+                            
+                            <input type="file" name="profile_image" class="input" disabled/>
+                            <p id="username-error" class="error-message"></p>
+                        </div>  
                         <div class="inputfield">
                             <label>
                                 Username 
