@@ -5,6 +5,10 @@
     {%block head%}
     {%endblock head%}
     {% block section %}     
-        <div class="text">Dashboard</div>
+        {% if student.is_superuser %}
+            {%include 'courses/adminDashboard.html'%}
+        {% else %}
+            {%include 'courses/standardDashboard.html'%}
+        {% endif %}
     {% endblock section%}
 </html>

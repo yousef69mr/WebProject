@@ -1,6 +1,11 @@
 import os 
 from django.core.exceptions import ValidationError
 
+
+def get_valid_image_extensions():
+    valid_image_extensions = ['.jpg', '.png','.jpeg']
+    return valid_image_extensions
+
 def validate_file_extension(value):
     
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename

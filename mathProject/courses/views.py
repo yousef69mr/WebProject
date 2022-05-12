@@ -1,11 +1,12 @@
 
-
+import os
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
+from .validators import get_valid_image_extensions
 from users.models import Student,User,Admin
 from .models import File, Lecture,RegisteredLecture
 from pages.models import Message,Level
@@ -42,30 +43,39 @@ def lectures(request):
 
         return redirect(reverse("login"))
         
+    
+    try:
+        
+        user = get_object_or_404(Student,id=request.user.id)
+        print(user)
+    except:
+        user = get_object_or_404(Admin,id=request.user.id)
+        print(user)
 
-    student = get_object_or_404(User,id=request.user.id)
-    registered = RegisteredLecture.objects.filter(user=student)
+    registered = RegisteredLecture.objects.filter(user=user)
     lectures = registered.values_list('lecture',flat=True)
     #print(registered)
     #print(lectures)
     files = File.objects.all()
     
-    if student.is_superuser :
+    if user.is_superuser :
         return render(request,'courses/lectures.html',{
-        'student':student,
+        'student':user,
         'lectures':Lecture.objects.all(),
         'registeredLectures': lectures,
         'files':files,
 
         })
 
-    return render(request,'courses/lectures.html',{
-        'student':student,
-        'lectures':Lecture.objects.filter(gradeLevel=student.level),
-        'registeredLectures': lectures,
-        'files':files,
+    if hasattr(user,'level'):
 
-    })
+        return render(request,'courses/lectures.html',{
+            'student':user,
+            'lectures':Lecture.objects.filter(gradeLevel=user.level),
+            'registeredLectures': lectures,
+            'files':files,
+
+        })
 
 def regesteredlectures(request):
 
@@ -157,6 +167,23 @@ def editProfilePage(request):
 
             })
 
+        extenstion = os.path.splitext(profileImage.name)[1]
+        print(extenstion)
+
+        validate_extension = get_valid_image_extensions()
+
+        if not extenstion.lower() in  validate_extension:
+
+            print("Invalid Extension")
+            return render(request, 'courses/editProfile.html', {
+                "levels":levels,
+                "message":"Picture Extension is Invalid",
+                "alertType":"alert-danger",
+                'student':user,
+
+            })
+       
+
         try:
       
             #print("here")
@@ -197,6 +224,8 @@ def editProfilePage(request):
             user.set_password(Pass)
             if profileImage:
                 user.set_profile_image(profileImage)
+
+            
             
             user.save()
             print(user.email)

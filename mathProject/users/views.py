@@ -1,4 +1,5 @@
 
+import threading
 from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404 , render,HttpResponseRedirect
 from django.urls import reverse
@@ -23,6 +24,15 @@ def getUsers(request):
     return JsonResponse({
         "students":list(users.values())
     })
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send()
 
 
 
@@ -51,7 +61,8 @@ def send_activation_email(user,request):
         to=[user.email],
         )
 
-    email_message.send()
+
+    EmailThread(email_message).start()
 
     
     

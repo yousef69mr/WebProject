@@ -1,4 +1,4 @@
-import os ,sys 
+import os 
 
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -117,7 +117,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         print(extenstion)
         file_name = str(self.id) + extenstion[1]
         print(file_name)
-       
+
 
         now = datetime.now()
         y = now.strftime("%y")
