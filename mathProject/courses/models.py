@@ -5,8 +5,10 @@ from django.shortcuts import redirect
 from datetime import datetime
 from django.db import models
 from django.urls import reverse
+
+
 from .validators import validate_file_extension,validate_image_file_extension
-from pages.models import Level
+from pages.models import Level,Subject
 from users.models import User
 
 # Create your models here.
@@ -17,20 +19,30 @@ MATH_BRANCHES=(
     ('geometry','GEOMETRY'),
 )
 
+
 class Lecture(models.Model):
     title=models.CharField(max_length=100)
     image=models.ImageField(default="media/defaults/photo-1429043794791-eb8f26f44081.jpeg",upload_to='media/photos/%y/%m/%d', validators=[validate_image_file_extension],verbose_name="Thumbnail",null=True)
-    branch=models.CharField(max_length=25,choices=MATH_BRANCHES,verbose_name='category')
+    branch=models.ForeignKey(Subject,on_delete=models.CASCADE,verbose_name='Educational Subject')
     sourceLink=models.CharField(max_length=400)
     gradeLevel=models.ForeignKey(Level,on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     creationTime =models.DateTimeField(default=datetime.now)
 
     def  __str__(self):
-        return f" {self.title} ({self.branch})"
+        return f" {self.title} ( {self.branch.title} )"
         
     class Meta:
         ordering=['id']
+
+    def getNumberOfRegistrations(self):
+        regestered = RegisteredLecture.objects.all()
+        counter = 0
+        for instance in regestered:
+            if self.id == instance.lecture.id:
+                counter+=1
+
+        return counter
 
 
 
@@ -55,9 +67,9 @@ class File(models.Model):
     lecture=models.ForeignKey(Lecture,on_delete=models.CASCADE,default=NULL)
     file =models.FileField(default=NULL,upload_to='media/files/%Y/%m/%d/', validators=[validate_file_extension])
     level = models.ForeignKey(Level,on_delete=models.CASCADE,default=NULL)
-    branch=models.CharField(max_length=25,choices=MATH_BRANCHES,verbose_name='category')
+    branch=models.ForeignKey(Subject,on_delete=models.CASCADE,verbose_name='Educational Subject')
     uploadTime =models.DateTimeField(default=datetime.now)
-    isActive=models.BooleanField(default=True)
+    isActive=models.BooleanField(default=True,verbose_name='active')
 
     def truncate(cls):
         with connection.cursor() as cursor:
@@ -74,4 +86,4 @@ class File(models.Model):
         return redirect(self.file)
 
     def  __str__(self):
-        return f"{self.lecture.id}) , ({self.file})"
+        return f"{self.lecture.id}) {os.path.basename(self.file.name)}"

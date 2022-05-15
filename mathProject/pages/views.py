@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse 
 from users.models import Student,Login,User
 from users.views import send_activation_email
-from pages.models import Level,Message
+from pages.models import Level,Message, Subject
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
@@ -12,9 +12,11 @@ from django.contrib import messages
 def index(request):
 
     levels= Level.objects.all()
+    subjects = Subject.objects.all()
     return render(request,'pages/index.html',{
 
         'levels':levels,
+        'subjects':subjects
 
     })
 
@@ -169,8 +171,14 @@ def loginPage(request):
                 
                 loginObject.set_login_method('username')
 
-                print("here")
-                #loginObject.save()
+                try:
+                    student = get_object_or_404(Student,id=user.id)
+                    loginObject.set_Educational_Level(student.level)
+                except:
+                    print("Not Student")
+
+
+                loginObject.save()
 
                 print(loginObject)
                 login(request,user)
@@ -216,8 +224,13 @@ def loginPage(request):
                 
                 loginObject.set_login_method('email')
 
-                print("here")
-                #loginObject.save()
+                try:
+                    student = get_object_or_404(Student,id=user.id)
+                    loginObject.set_Educational_Level(student.level)
+                except:
+                    print("Not Student")
+
+                loginObject.save()
 
                 print(loginObject)
                 login(request,user)
@@ -263,7 +276,13 @@ def loginPage(request):
                 loginObject = Login(user=user,email=user.email)
                 loginObject.set_login_method('code')
 
-                #loginObject.save()
+                try:
+                    student = get_object_or_404(Student,id=user.id)
+                    loginObject.set_Educational_Level(student.level)
+                except:
+                    print("Not Student")
+                
+                loginObject.save()
 
                 login(request,user)
 

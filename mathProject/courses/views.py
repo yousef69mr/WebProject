@@ -1,4 +1,5 @@
 
+from datetime import date
 import os
 from django.contrib import messages
 from django.http import JsonResponse
@@ -7,9 +8,10 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from .validators import get_valid_image_extensions
-from users.models import Student,User,Admin
+from users.models import Login, Student,User,Admin
 from .models import File, Lecture,RegisteredLecture
 from pages.models import Message,Level
+from django.db.models import Count
 # Create your views here.
 
 def getFiles(request):
@@ -17,6 +19,20 @@ def getFiles(request):
     return JsonResponse({
         "files":list(files.values())
     })
+
+def getDataOfLogins(request):
+
+    timeArray = [None]*24
+    for i in timeArray:
+        print(i)
+    print(len(timeArray))
+    today =  date.today()
+    levels = Level.objects.all()
+    dailyLogins = Login.objects.filter(loginTime__day = today.day)
+    print(today.day)
+    
+    
+    
 
 def lecture(request,lecture_id):
     
@@ -102,9 +118,37 @@ def dashboardPage(request):
         
     student = get_object_or_404(User,id=request.user.id)
     
+    if student.is_superuser:
+        getDataOfLogins(request)
+        today =  date.today()
+        #print(d.day)
+        students = Student.objects.all()
+        lectures = Lecture.objects.all()
+        numberOfStudents = students.count()
+        numberOfLectures = lectures.count()
+        numberOfFiles = File.objects.all().count()
+        dailyLogins = Login.objects.filter(loginTime__day = today.day).count()
+        print(dailyLogins)
+        
+        return render(request,'courses/dashboard.html',{
+            'student':student,
+            'students':students.reverse(),
+            'lectures': lectures.reverse(),
+            'numberOfStudents':numberOfStudents,
+            'numberOfLectures':numberOfLectures,
+            'numberOfFiles':numberOfFiles,
+            'dailyLogins':dailyLogins,
+            
+
+
+        })
+
     return render(request,'courses/dashboard.html',{
         'student':student,
     })
+
+
+
 
 def editProfilePage(request):
 

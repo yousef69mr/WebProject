@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os 
 
 from django.conf import settings
@@ -193,6 +194,7 @@ class Admin(User):
     
     class Meta:
         verbose_name = 'Admin'
+        ordering=['id']
 
     def __str__(self):
         return f"{self.full_name} "
@@ -210,6 +212,7 @@ class Student(User):
     
     class Meta:
         verbose_name = 'Student'
+        ordering=['id']
 
     def set_Educational_Level(self,level):
         self.level = level
@@ -237,9 +240,9 @@ LOGIN_METHODS = [
 ]
 class Login(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name='User')
-    level = models.ForeignKey(Level,on_delete=models.CASCADE,verbose_name='Education level')
+    level = models.ForeignKey(Level,on_delete=models.CASCADE,null=True,verbose_name='Education level')
     email = models.EmailField(max_length=50)
-    loginMethod = models.CharField(max_length=10,choices=LOGIN_METHODS)
+    loginMethod = models.CharField(max_length=10,choices=LOGIN_METHODS,null=True)
     loginTime = models.DateTimeField(default=datetime.now,verbose_name='Login Time')
 
     class Meta:
@@ -248,6 +251,9 @@ class Login(models.Model):
 
     def set_login_method(self,method):
         self.loginMethod = method
+
+    def set_Educational_Level(self,level):
+        self.level = level
 
     def  __str__(self):
         return f"User : {self.user} , Email : {self.email}"

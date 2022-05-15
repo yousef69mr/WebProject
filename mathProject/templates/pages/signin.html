@@ -30,7 +30,9 @@
                         {{message}}
                         {%if alertType == "alert-success"%}
                             <br>
-                            Your Code : <span>{{code}}</span>
+                            {% if code%}
+                                Your Code : <span>{{code}}</span>
+                            {%endif%}
                         {%endif%}
                     </div>
                 {%endif%}
@@ -44,7 +46,14 @@
                         <input type="password" name="password" placeholder="Password" required>
                         <i class="fas fa-lock"></i>
                     </div>
-
+                    <div style="text-align:center;">
+                        <p class="reset-password">
+                            Forget Password ? 
+                            <a href="{%url 'request-password'%}">
+                                <span style="color:red ;">Reset your password</span> 
+                            </a>
+                        </p>
+                    </div>
                     <button class="submit">Login</button>
                     
                 </form>

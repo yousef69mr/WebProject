@@ -1,6 +1,7 @@
 from asyncio.windows_events import NULL
 from django.db import models
 from datetime import datetime
+from courses.validators import validate_image_file_extension
 
 
 # Create your models here.
@@ -32,6 +33,30 @@ LEVELS_IN_LETTERS=(
     ('preparatory','PREPARATORY'),
     ('secondary','SECONDARY'),
 )
+SYMBOLS =(
+    ('fa-solid fa-book-open-cover','Arabic'),
+    ('fa-solid fa-flask-vial','Chemistry'),
+    ('fa-solid fa-lambda','Physics'),
+    ('fa-solid fa-book','English'),
+    ('fa-solid fa-circle','Geometry'),
+    ('fa-solid fa-angle','Trignometry'),
+    ('fa-solid fa-square-root-variable','Algebra'),
+    ('fa-solid fa-chart-pie','Statistics'),
+)
+class Subject(models.Model):
+    #courseCode = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=50,choices=SYMBOLS,verbose_name="Symbol")
+    title=models.CharField(max_length=100)
+    color=models.CharField(max_length=15,default='#64bcf4',verbose_name='Card Color')
+    active = models.BooleanField(default=True)
+    creationTime =models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        ordering =['id']
+    
+    def  __str__(self):
+        return f" {self.title}"
+
 
 class Level(models.Model):
 

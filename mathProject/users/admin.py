@@ -6,11 +6,11 @@ from django.contrib.auth.admin import UserAdmin
 
 class allUsersAdmin(UserAdmin):
     model = User
-    list_display= ['id','username','email','phone','gender','is_active','is_verified']
+    list_display= ['id','username','email','phone','gender','last_login','is_active','is_verified']
     list_display_links= []
     #list_editable =['gender']
     search_fields=['phone','username','email']
-    list_filter = ['gender','is_active','is_verified']
+    list_filter = ['gender','last_login','is_active','is_verified']
 
     fieldsets = [
 

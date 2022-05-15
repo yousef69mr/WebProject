@@ -1,6 +1,6 @@
 from pyexpat import model
 from django.contrib import admin
-from .models import  Level, Message
+from .models import  Level, Message, Subject
 
 # Register your models here.
 
@@ -12,7 +12,14 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields=['sender']
     list_filter = ['isSeen','deliverdTime']
 
+class SubjectAdmin(admin.ModelAdmin):
+    model = Subject
+    list_display= ['id','title','creationTime','active']
+    list_display_links= ['id','title']
+    search_fields=['id','title']
+    list_filter = ['creationTime','active']
 
+admin.site.register(Subject,SubjectAdmin)
 admin.site.register(Level)
 admin.site.register(Message,MessageAdmin)
 
