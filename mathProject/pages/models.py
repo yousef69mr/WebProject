@@ -1,7 +1,9 @@
 from asyncio.windows_events import NULL
+from operator import le
+
 from django.db import models
-from datetime import datetime
-from courses.validators import validate_image_file_extension
+from datetime import datetime,date
+
 
 
 # Create your models here.
@@ -72,8 +74,37 @@ class Level(models.Model):
         ordering=['id']
         unique_together = (("levelCode", "levelFullName"),("levelNameInLetters","numberOfLevelInLetters"),)
 
+
+
+    def getDailyLoginData(self):
+        
+        from users.models import Login
+
+        data =[]
+        today = date.today()
+        currentTime = datetime.now()
+        todayLogins = Login.objects.filter(loginTime__day = today.day,level = self)
+        print(todayLogins)
+        hour = currentTime.strftime("%H")
+        print(int(hour))
+        
+        
+        for i in range(int(hour)):
+            print(i)
+            hourLogin = todayLogins.filter(loginTime__hour= i)
+            data.append(hourLogin.count())
+
+
+        for i in range(len(data)):
+            print(data[i])
+
+        return data
+
     def  __str__(self):
         return f" {self.levelFullName}"
+
+
+
 
 class Message(models.Model):
 

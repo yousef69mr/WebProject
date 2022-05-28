@@ -1,0 +1,98 @@
+{%extends 'parts/sideBar.html'%}
+{%load static%}
+
+<html>
+    {%block head%}
+    <link rel="stylesheet" href="{%static 'css/lecturesTable.css'%}">
+    {%endblock head%}
+    {% block section %}     
+        {% if student.is_superuser %}
+        
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Lectures</h3>
+                    
+                </div>
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Thumbnail</td>
+                                    <td>Lecture Title</td>
+                                    <td>Subject</td>
+                                    <td>Education Level</td>
+                                    <td>Number Of Registeration</td>
+                                    <td>Creation Date</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                
+                                {% for lecture in lectures %}
+                                    
+                                    <tr>
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                <img src="{{lecture.image.url}}" width="60px" height="50px" alt="Thumbnail">
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                {{lecture.title|title}}
+                                            </a>
+                                        </td>
+                                    
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                {{lecture.branch|title}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}"> 
+                                                {{lecture.gradeLevel|title}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                {{lecture.getNumberOfRegistrations}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}"> 
+                                                {{lecture.creationTime}}
+                                            </a>
+                                        </td>
+                                    
+                                        <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                {%if lecture.active%}
+                                                    <span class="status green"></span>
+                                                    <label>Active</label>
+                                                {%else%}
+                                                    <span class="status red"></span>
+                                                    <label>Inactive</label> 
+                                                {%endif%}
+                                            </a>
+                                        </td>
+                                        
+                                    </tr>
+
+                                {%endfor%}
+                            
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        {% else %}
+            {%include 'courses/error.html'%}
+        {% endif %}
+    {% endblock section%}
+</html>

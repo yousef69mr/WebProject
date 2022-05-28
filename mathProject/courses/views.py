@@ -9,9 +9,10 @@ from django.contrib.auth import authenticate, login
 
 from .validators import get_valid_image_extensions
 from users.models import Login, Student,User,Admin
+from users.views import getDataOfGender
 from .models import File, Lecture,RegisteredLecture
-from pages.models import Message,Level
-from django.db.models import Count
+from pages.models import Message,Level, Subject
+
 # Create your views here.
 
 def getFiles(request):
@@ -19,6 +20,32 @@ def getFiles(request):
     return JsonResponse({
         "files":list(files.values())
     })
+
+
+    
+def getNumberOfStudentsSignedToSubject(subjects):
+    
+    arrayOfData = []
+    for i in range(len(subjects)):
+        regesteredlectures = RegisteredLecture.objects.all().filter(lecture__branch = subjects[i])
+
+        arrayOfData.append(regesteredlectures.count())
+
+    print(arrayOfData)
+
+    return arrayOfData
+
+def getNumberOfFilesSignedToSubject(subjects):
+
+    arrayOfData = []
+    for i in range(len(subjects)):
+        files = File.objects.all().filter(branch = subjects[i])
+
+        arrayOfData.append(files.count())
+
+    print(arrayOfData)
+
+    return arrayOfData
 
 def getDataOfLogins(request):
 
@@ -120,6 +147,15 @@ def dashboardPage(request):
     
     if student.is_superuser:
         getDataOfLogins(request)
+        levels = Level.objects.all()
+        levels[0].getDailyLoginData()
+        genderData = getDataOfGender(request)
+        subjects = Subject.objects.all()
+        print(subjects)
+        subjectList = list(subjects.values_list('title',flat=True))
+        print(subjectList)
+        numberOfStudentsSignedToSubject = getNumberOfStudentsSignedToSubject(subjects)
+        numberOfFilesSignedToSubject = getNumberOfFilesSignedToSubject(subjects)
         today =  date.today()
         #print(d.day)
         students = Student.objects.all()
@@ -131,6 +167,7 @@ def dashboardPage(request):
         print(dailyLogins)
         
         return render(request,'courses/dashboard.html',{
+            'levels':levels,
             'student':student,
             'students':students.reverse(),
             'lectures': lectures.reverse(),
@@ -138,6 +175,10 @@ def dashboardPage(request):
             'numberOfLectures':numberOfLectures,
             'numberOfFiles':numberOfFiles,
             'dailyLogins':dailyLogins,
+            'chart_1':genderData,
+            'subjects':subjectList,
+            'chart_2':numberOfStudentsSignedToSubject,
+            'chart_3':numberOfFilesSignedToSubject,
             
 
 
@@ -370,4 +411,23 @@ def contactUsPage(request):
     return render(request,'courses/contactFormPage.html',{
         'student':student,
     })
+
+
+def lecturesTable(request):
+
+    if not request.user.is_authenticated:
+
+        return redirect(reverse("login"))
+        
+    user = get_object_or_404(User,id=request.user.id)
+
+    if user.is_superuser:
+    
+        lectures = Lecture.objects.all()
+
+        return render(request,'courses/lecturesTable.html',{
+            'lectures':lectures.reverse(),
+            'student':user,
+        })
+
 

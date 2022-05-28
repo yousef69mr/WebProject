@@ -17,6 +17,23 @@ from django.conf import settings
 
 # Create your views here.
 
+
+def getDataOfGender(request):
+    if request.is_ajax:
+
+        users = User.objects.all()
+        male = users.filter(gender = 'male').count()
+        female = users.filter(gender = 'female').count()
+
+        
+        print(male)
+        print(female)
+
+        return [female,male]
+    
+    
+    
+    
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))

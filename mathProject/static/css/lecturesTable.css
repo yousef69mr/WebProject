@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root{
+    --main-color:#3e7cb6;
+    --color-dark: #1D2231;
+    --text-grey: #8390A2;
+    --light-white:#fff;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style-type: none;
+    text-decoration: none;
+    font-family: 'Poppins',sans-serif;
+}
+
+
+.home-section{
+    padding-top: 20px;
+}
+
+.card{
+    background: var(--light-white);
+    border-radius: 10px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    margin: 20px 20px;
+    text-align: center;
+}
+
+.card-header,
+.card-body{
+    padding: 1rem;
+}
+
+.card-header{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header button{
+    cursor: pointer;
+    background: var(--main-color);
+    border-radius: 10px;
+    color: var(--light-white);
+    font-size: .8rem;
+    padding: .5rem;
+    border: 1px solid var(--main-color);
+}
+
+.card-header button:hover{
+    background: var(--light-white);
+    color: var(--main-color);
+}
+
+table{
+    border-collapse: collapse;
+    border-radius: 10px;
+
+}
+
+thead tr{
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+thead td{
+    font-weight: 700;
+}
+
+td{
+    padding: .5rem 1rem;
+    font-size: .9rem;
+    color: #222;
+}
+
+td .status{
+    display: inline-block;
+    height: 11px;
+    width: 11px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+tr td:last-child{
+    display: flex;
+    align-items: center;
+    height: 80px;
+}
+
+tbody tr td a{
+    /*font-size: 1.1rem;*/
+    color: var(--color-dark);
+}
+
+tbody tr:hover td{
+    background: var(--main-color);
+}
+tbody tr:hover td a{
+    color: var(--light-white);
+}
+
+tbody tr:last-child td:last-child{
+    border-bottom-right-radius: 10px;
+}
+
+tbody tr:last-child td:first-child{
+    border-bottom-left-radius: 10px;
+}
+
+.status.green{
+    background: rgb(53, 201, 37);
+}
+
+.status.pink{
+    background: deeppink;
+}
+
+.status.red{
+    background: rgb(245, 5, 5);
+}
+
+.table-responsive{
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+
+
