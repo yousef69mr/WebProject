@@ -1,7 +1,6 @@
 {%extends 'parts/sideBar.html'%}
 {%load static%}
-<!DOCTYPE html>
-<html>
+
   {%block head%}
     <title>Contact Form</title>
     <link rel="stylesheet" href="{%static 'css/contactFormPage.css'%}" />
@@ -61,28 +60,29 @@
           <span class="circle one"></span>
           <span class="circle two"></span>
 
-          <form action="#" method="POST" autocomplete="off">
+          <form action="{%url 'contactus'%}" method="POST" autocomplete="off">
             {% csrf_token %}
             <h3 class="title">Contact us</h3>
-            <div class="input-container">
-              <input type="text" name="name" class="input" minlength="3" required/>
+            <input type="hidden" name="code" class="input" value="{{student.id}}"  required/>
+            <div class="input-container focus">
+              <input type="text" name="name" class="input" value="{{student.username}}"  required disabled/>
               <label for="">Username</label>
               <span>Username</span>
             </div>
-            <div class="input-container">
-              <input type="email" name="email" class="input" required/>
+            <div class="input-container focus">
+              <input type="email" name="email" value="{{student.email}}" class="input" required disabled/>
               <label for="">Email</label>
               <span>Email</span>
             </div>
-            <div class="input-container">
-              <input type="tel" name="phone" class="input" minlength="11" maxlength="11" required/>
+            <div class="input-container focus">
+              <input type="tel" name="phone" class="input" value="{{student.phone}}"  required disabled/>
               <label for="">Phone</label>
               <span>Phone</span>
             </div>
             <div class="input-container">
               <input type="text" name="subject" class="input" required/>
-              <label for="">Subject</label>
-              <span>Subject</span>
+              <label for="">Subject </label>
+              <span>Subject </span>
             </div>
             <div class="input-container textarea">
               <textarea name="message" class="input" required></textarea>
@@ -95,6 +95,5 @@
       </div>
     </div>
 
-    <script src="{%static 'js/contactFormPage.js'%}" type="text/babel"></script>
+    <script src="{%static 'js/contactFormPage.js'%}"></script>
   {%endblock section%}
-</html>

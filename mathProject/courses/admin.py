@@ -1,6 +1,5 @@
-from pyexpat import model
 from django.contrib import admin
-from .models import Lecture , RegisteredLecture,File
+from .models import Lecture , RegisteredLecture,File,Rating
 # Register your models here.
 
 class LectureAdmin(admin.ModelAdmin):
@@ -30,9 +29,18 @@ class RegisteredLectureAdmin(admin.ModelAdmin):
     list_display_links= ['user','lecture']
     #list_editable =['file']
     search_fields=['user']
+
+class RatingAdmin(admin.ModelAdmin):
+    model = Rating
+    list_display= ['user','score','creationTime']
+    list_display_links= ['user','score']
+    #list_editable =['file']
+    list_filter = ['score','creationTime']
+    search_fields=['user']
     
 
 
 admin.site.register(Lecture,LectureAdmin)
 admin.site.register(RegisteredLecture,RegisteredLectureAdmin)
 admin.site.register(File,FileAdmin)
+admin.site.register(Rating,RatingAdmin)

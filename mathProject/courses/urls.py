@@ -10,5 +10,7 @@ urlpatterns = [
     path('contactUs/',views.contactUsPage,name="contactus"),
     path('lectures/<int:lecture_id>/',views.lecture,name="lecture"),
     path('lecturesTable/',views.lecturesTable,name="lecturesTable"),
+    path('Users/',views.profileCards,name="profileCards"),
+    path('rateSystem/',views.rateSystem,name="rateSystem"),
     
 ]

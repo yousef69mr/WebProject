@@ -1,0 +1,62 @@
+{%extends 'parts/sideBar.html'%}
+{%load static%}
+
+{%block head%}
+    <link rel="stylesheet" href="{%static 'css/profileCards.css'%}"/>
+    <title>Profile Card UI Design</title>
+
+{%endblock head%}
+{%block section%}
+  <div class="body">
+    <div class="card-wrap">
+        {%for user in users%}
+            <div class="card dark">
+                <div class="card-inner">
+                    <div class="card-face front">
+                        <img src="{{user.profile_image.url}}" alt="profile image"/>
+                        <div class="text">
+                            <h4>{{user.first_name}}</h4>
+                            {%if user.is_superuser%}
+                                <p>Admin</p>
+                            {%else%}
+                                <p>Student</p>
+                            {%endif%}
+                            <h6>ID : #1 </h6>
+                        </div>
+                    </div>
+                    <div class="card-face back">
+                        
+                        <h6>username : {{user.username}}</h6>
+                        <br>
+                        <h6>code : #{{user.id}}</h6>
+                        <br>
+                        <h6>first name : {{user.first_name}}</h6>
+                        <br>
+                        <h6>last name : {{user.last_name}}</h6>
+                        <br>
+                        <h6>email : {{user.email}}</h6>
+                        <br>
+                        <h6>phone : {{user.phone}}</h6>
+                        <br>
+                        {%if not user.is_superuser%}
+                            <h6>parent's phone : {{user.parentPhone}}</h6>
+                            <br>
+                            <h6>Education Level : {{user.level}}</h6>
+                            <br>
+                            <h6>School Name : {{user.schoolname}}</h6>
+                            <br>
+                        {%endif%}
+                        <h6>Gender : {{user.gender}}</h6>
+                        <br>
+                        <h6>Active : {{user.is_active}}</h6>
+                        <br>
+                        <h6>Verified : {{user.is_verified}}</h6>
+                        <br>
+                    
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+  </div>
+{%endblock section%}

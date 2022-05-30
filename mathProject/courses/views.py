@@ -1,6 +1,7 @@
 
 from datetime import date
 import os
+
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
@@ -10,7 +11,7 @@ from django.contrib.auth import authenticate, login
 from .validators import get_valid_image_extensions
 from users.models import Login, Student,User,Admin
 from users.views import getDataOfGender
-from .models import File, Lecture,RegisteredLecture
+from .models import File, Lecture,RegisteredLecture,Rating
 from pages.models import Message,Level, Subject
 
 # Create your views here.
@@ -47,16 +48,23 @@ def getNumberOfFilesSignedToSubject(subjects):
 
     return arrayOfData
 
-def getDataOfLogins(request):
+def sumOfList(List):
+    sum=0
+    for i in range(len(List)):
+        sum+=int(List[i])
 
-    timeArray = [None]*24
-    for i in timeArray:
-        print(i)
-    print(len(timeArray))
-    today =  date.today()
-    levels = Level.objects.all()
-    dailyLogins = Login.objects.filter(loginTime__day = today.day)
-    print(today.day)
+    return sum
+
+def calculateAverageRatings():
+
+    rates = Rating.objects.all().values_list('score',flat=True)
+    print(rates)
+    print(list(rates))
+    sum =sumOfList(list(rates))
+    numOfRates = rates.count()
+    result = sum/numOfRates
+
+    return result
     
     
     
@@ -146,10 +154,11 @@ def dashboardPage(request):
     student = get_object_or_404(User,id=request.user.id)
     
     if student.is_superuser:
-        getDataOfLogins(request)
+        
         levels = Level.objects.all()
-        levels[0].getDailyLoginData()
+        
         genderData = getDataOfGender(request)
+        averageRatings = calculateAverageRatings()
         subjects = Subject.objects.all()
         print(subjects)
         subjectList = list(subjects.values_list('title',flat=True))
@@ -171,6 +180,8 @@ def dashboardPage(request):
             'student':student,
             'students':students.reverse(),
             'lectures': lectures.reverse(),
+            'numberOfSubjects':subjects.count(),
+            'averageRatings':averageRatings,
             'numberOfStudents':numberOfStudents,
             'numberOfLectures':numberOfLectures,
             'numberOfFiles':numberOfFiles,
@@ -376,7 +387,7 @@ def contactUsPage(request):
         return redirect(reverse("login"))
         
         
-    student = get_object_or_404(Student,id=request.user.id)
+    user = get_object_or_404(User,id=request.user.id)
 
     if request.method == "POST":
         userName = request.POST.get('name')
@@ -396,20 +407,20 @@ def contactUsPage(request):
             message.save()
             messages.success(request,"Sent Successfully")
             return render(request, 'courses/contactFormPage.html', {
-                'student':student,
+                'student':user,
                 "message": "Sent Successfully"
             })
 
         except:
             messages.warning(request,"An Error Occured ")
             return render(request, 'courses/contactFormPage.html', {
-                'student':student,
+                'student':user,
                 "message": "An Error Occured ... Try Again Later"
             })
 
 
     return render(request,'courses/contactFormPage.html',{
-        'student':student,
+        'student':user,
     })
 
 
@@ -431,3 +442,114 @@ def lecturesTable(request):
         })
 
 
+
+def profileCards(request):
+
+    if not request.user.is_authenticated:
+
+        return redirect(reverse("login"))
+        
+    user = get_object_or_404(User,id=request.user.id)
+
+    if user.is_superuser:
+    
+        users = User.objects.all()
+
+        return render(request,'courses/profileCards.html',{
+            'users':users,
+            'student':user,
+        })
+
+    else:
+        return render(request,'courses/error.html',{
+            'student':user,
+        })
+
+
+def rateSystem(request):
+     
+    if not request.user.is_authenticated:
+
+        return redirect(reverse("login"))
+        
+        
+    user = get_object_or_404(User,id=request.user.id)
+    #print(user)
+
+    if request.method == "POST":
+        
+
+        value = request.POST.get('rate')
+        #print(value)
+
+        id = request.POST.get('id')
+        username = request.POST.get('username')
+        description = request.POST.get('description')
+        
+
+        print(id)
+        print(username)
+        print(description)
+
+
+        try:
+            rate = get_object_or_404(Rating,user__id=user.id)
+            #print(rate)
+        except:
+            rate = None
+
+
+        if rate == None:
+
+   
+            try:
+                rate = Rating(user=user,score=value,description=description)
+                
+                #print(rate)
+                rate.save()
+                
+                return render(request, 'courses/rateSystem.html', {
+                    'student':user,
+                    'clicked':True,
+                    "message": "Thanks for rating us!"
+                })
+
+            except:
+                
+                return render(request, 'courses/rateSystem.html', {
+                    'student':user,
+                    'clicked':True,
+                    "message": "An Error Occured ... Try Again Later"
+                })
+
+        else:
+            
+            try:
+                rate.set_score(value)
+                rate.set_description(description)
+                #print(rate)
+                rate.save()
+                
+                return render(request, 'courses/rateSystem.html', {
+                    'student':user,
+                    'clicked':True,
+                    "message": "Thanks for rating us!"
+                })
+
+            except:
+                
+                return render(request, 'courses/rateSystem.html', {
+                    'student':user,
+                    'clicked':True,
+                    "message": "An Error Occured ... Try Again Later"
+                })
+
+
+
+
+    return render(request,'courses/rateSystem.html',{
+        'student':user,
+        "alertType":"",
+        'clicked':False,
+
+    })

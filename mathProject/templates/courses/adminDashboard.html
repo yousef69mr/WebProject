@@ -24,7 +24,25 @@
                     <div>
                         <span class="las la-users"></span>
                     </div>
-                </div>  
+                </div> 
+                <div class="card-single">
+                    <div>
+                        <h1>{{numberOfSubjects}}</h1><!-- num of Average Ratings -->
+                        <span>Subjects</span>
+                    </div>
+                    <div>
+                        <span class="las la-atom"></span>
+                    </div>
+                </div> 
+                <div class="card-single">
+                    <div>
+                        <h1>{{averageRatings}}</h1><!-- num of Average Ratings -->
+                        <span>Average Ratings</span>
+                    </div>
+                    <div>
+                        <span class="las la-star"></span>
+                    </div>
+                </div>   
                 <div class="card-single">
                     <div>
                         <h1>{{numberOfLectures}}</h1><!-- num of Lectures -->
@@ -36,7 +54,7 @@
                 </div>    
                 <div class="card-single">
                     <div>
-                        <h1>{{numberOfFiles}}</h1><!-- num of Quizzes -->
+                        <h1>{{numberOfFiles}}</h1><!-- num of Files -->
                         <span>Files</span>
                     </div>
                     <div>
@@ -166,7 +184,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h3>New Students</h3>
-                            <button>See All<span class="las la-arrow-right"></span></button>
+                            <a href="{%url 'profileCards'%}">
+                                <button>See All<span class="las la-arrow-right"></span></button>
+                            </a>
                         </div>
 
                         <div class="card-body">

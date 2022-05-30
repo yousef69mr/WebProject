@@ -87,3 +87,23 @@ class File(models.Model):
 
     def  __str__(self):
         return f"{self.lecture.id}) {os.path.basename(self.file.name)}"
+
+
+
+class Rating(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE,verbose_name='User')
+    description = models.TextField(max_length=300,null=True,blank=True)
+    score = models.IntegerField()
+    creationTime =models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        ordering=['id']
+
+    def set_score(self,score):
+        self.score = score
+
+    def set_description(self,description):
+        self.description = description
+        
+    def  __str__(self):
+        return f"{self.user} --> {self.score}"
