@@ -27,6 +27,15 @@
                 </div> 
                 <div class="card-single">
                     <div>
+                        <h1>{{numberOfAdmins}}</h1><!-- num of Admins -->
+                        <span>Admins</span>
+                    </div>
+                    <div>
+                        <span class="las la-users"></span>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div>
                         <h1>{{numberOfSubjects}}</h1><!-- num of Average Ratings -->
                         <span>Subjects</span>
                     </div>
@@ -95,6 +104,11 @@
                         Your browser does not support the HTML canvas tag.
                     </canvas>
                 </div>
+                <div class="box">
+                    <canvas id="myChart_5">
+                        Your browser does not support the HTML canvas tag.
+                    </canvas>
+                </div>
             </div>
 
             <div class="recent-grid">
@@ -108,16 +122,16 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive table-sortable">
                                 <table width="100%">
                                     <thead>
                                         <tr>
-                                            <td>Lecture Title</td>
-                                            <td>Subject</td>
-                                            <td>Education Level</td>
-                                            <td>Number Of Registeration</td>
-                                            <td>Creation Date</td>
-                                            <td>Status</td>
+                                            <th col-index = 1>Lecture Title</th>
+                                            <th col-index = 2>Subject</th>
+                                            <th col-index = 3>Education Level</th>
+                                            <th col-index = 4>Number Of Registeration</th>
+                                            <th col-index = 5>Creation Date</th>
+                                            <th col-index = 6>Status</th>
                                         </tr>
                                     </thead>
     
@@ -215,6 +229,136 @@
                     </div>
                 </div>
 
+                <div class="projects">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Top 5 Registerd Lectures</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th col-index = 1>Rank</th>
+                                            <th col-index = 2>Lecture Title</th>
+                                            <th col-index = 3>Subject</th>
+                                            <th col-index = 4>Education Level</th>
+                                            <th col-index = 5>Number Of Registeration</th>
+                                            <th col-index = 6>Creation Date</th>
+                                            
+
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+
+                                        {% with new_list=rankedData|slice:":5" %}
+                                            {% for lecture in new_list %}
+                                                
+                                                <tr>
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                            {{ forloop.counter }}
+                                                        </a>
+                                                    </td>
+
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                            {{lecture.title|title}}
+                                                        </a>
+                                                    </td>
+                                                
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                            {{lecture.branch|title}}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}"> 
+                                                            {{lecture.gradeLevel|title}}
+                                                        </a>
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                            {{lecture.getNumberOfRegistrations}}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{%url 'lecture' lecture_id=lecture.id%}"> 
+                                                            {{lecture.creationTime}}
+                                                        </a>
+                                                    </td>
+                                                
+                                                    
+                                                    
+                                                </tr>
+        
+                                            {%endfor%}
+                                        {%endwith%}
+                                    </tbody>
+    
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="customers">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>System Ratings</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th col-index = 1>Stars</th>
+                                            <th col-index = 2>Ratings</th>
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+
+                                        <tr>
+                                            <td><i class="las la-star"></i></td>
+                                            <td>{{star_1}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="las la-star"></i><i class="las la-star"></i></td>
+                                            <td>{{star_2}}</td>
+                                        </tr>
+                                        <tr>                                      
+                                            <td><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i></td>
+                                            <td>{{star_3}}</td>
+                                        </tr>
+                                        <tr>                                        
+                                            <td><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i></td>
+                                            <td>{{star_4}}</td>
+                                        </tr>
+                                        <tr>                                        
+                                            <td><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i><i class="las la-star"></i></td>
+                                        
+                                            <td>{{star_5}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Ratings</td>
+                                        
+                                            <td>{{totalRatings}}</td>
+                                        </tr>
+
+                                    </tbody>
+    
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
 
@@ -417,7 +561,73 @@
             }
         });
 
+
+        
+        /*******************************************************************/
+
+        const ctx5 = document.getElementById('myChart_5').getContext('2d');
+        const myChart5 = new Chart(ctx5, {
+            type: 'bar',
+            data: {
+                labels: ['5','4','3','2','1'],
+                datasets: [{
+                    label: 'Users\' Ratings',
+                    data: {{chart_5}},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Stars'
+                        }
+                    },
+                    x:{
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Users'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                    display: true,
+                    text: 'System Ratings'
+                    },
+                },
+                indexAxis:'y',
+            }
+        });
+
+
+        /*******************************************************************/
+
+
     </script>
+    <script src="{%static 'js/sortingTable.js'%}"></script>
+
 </body>
 
 </html>

@@ -17,16 +17,37 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table width="100%">
+                        <table id="lecture-table" class="table table-sortable" width="100%">
                             <thead>
                                 <tr>
-                                    <td>Thumbnail</td>
-                                    <td>Lecture Title</td>
-                                    <td>Subject</td>
-                                    <td>Education Level</td>
-                                    <td>Number Of Registeration</td>
-                                    <td>Creation Date</td>
-                                    <td>Status</td>
+                                    <th col-index = 1>Thumbnail</th>
+                                    <th col-index = 2>Lecture Title</th>
+                                    <th col-index = 3>Subject
+                                        <select class="table-filter" onchange="filter_rows()">
+                                            <option value="all"></option>
+                                            {%for subject in subjects%}
+                                                <option value="{{subject|title}}">{{subject.title|title}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </th>
+                                    <th col-index = 4>Education Level
+                                        <select class="table-filter" onchange="filter_rows()">
+                                            <option value="all"></option>
+                                            {%for level in levels%}
+                                                <option value="{{level.levelFullName|title}}">{{level.levelFullName}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </th>
+                                    <th col-index = 5>Number Of Registeration</th>
+                                    <th col-index = 5>Number Of Files</th>
+                                    <th col-index = 6>Creation Date</th>
+                                    <th col-index = 7>Status
+                                        <select class="table-filter" onchange="filter_rows()">
+                                            <option value="all"></option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -63,6 +84,11 @@
                                             </a>
                                         </td>
                                         <td>
+                                            <a href="{%url 'lecture' lecture_id=lecture.id%}">
+                                                {{lecture.getNumberOfFiles}}
+                                            </a>
+                                        </td>
+                                        <td>
                                             <a href="{%url 'lecture' lecture_id=lecture.id%}"> 
                                                 {{lecture.creationTime}}
                                             </a>
@@ -72,10 +98,10 @@
                                             <a href="{%url 'lecture' lecture_id=lecture.id%}">
                                                 {%if lecture.active%}
                                                     <span class="status green"></span>
-                                                    <label>Active</label>
+                                                    Active
                                                 {%else%}
                                                     <span class="status red"></span>
-                                                    <label>Inactive</label> 
+                                                    Inactive
                                                 {%endif%}
                                             </a>
                                         </td>
@@ -91,6 +117,16 @@
                 </div>
 
             </div>
+            <script>
+                window.onload = () => {
+                    console.log(document.querySelector("#lecture-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
+                };
+        
+                getUniqueValuesFromColumn()
+                
+            </script>
+            <script src="{%static 'js/lectureTablefilter.js'%}"></script>
+            <script src="{%static 'js/sortingTable.js'%}"></script>
         {% else %}
             {%include 'courses/error.html'%}
         {% endif %}

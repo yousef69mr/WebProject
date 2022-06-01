@@ -1,0 +1,62 @@
+{%load static%}
+<html>
+
+    <head>
+        <link rel="stylesheet" href="{%static 'css/ads.css'%}">
+    </head>
+
+
+
+    <body>
+       
+            <div class="PopUp">
+                <div class="content-box">
+                    
+                    <div class="closeAD"> 
+                        <img src="{%static 'img/ads/close.jpg'%}" alt="">
+                    </div>
+                    <div class="imagebox">
+
+                        <img src="{%static 'img/ads/learn.jpg'%}" alt="">
+
+
+                    </div>
+                
+                    <div class="content">
+                        <h1>Special offer</h1>
+                        <h2>50<sup>%</sup><span> off</span></h2>
+                        <p>offer ends after 5 days</p>
+                        <a href='https://www.udemy.com/' class="buton" >view offer</a>
+
+                    </div>
+
+                    
+                
+                </div>
+
+            </div>
+        
+
+        <script>
+            const popup=document.querySelector('.PopUp');
+            const close=document.querySelector('.closeAD');
+            window.onload=function(){
+
+            setTimeout(function(){
+
+            popup.style.display="block";
+
+
+            },2000)
+            }
+
+            close.addEventListener('click',()=>{
+
+
+            popup.style.display="none";
+
+            })
+        </script>
+
+</body>
+</html>

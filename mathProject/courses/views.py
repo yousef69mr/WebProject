@@ -14,6 +14,9 @@ from users.views import getDataOfGender
 from .models import File, Lecture,RegisteredLecture,Rating
 from pages.models import Message,Level, Subject
 
+from operator import attrgetter
+from itertools import chain
+
 # Create your views here.
 
 def getFiles(request):
@@ -32,7 +35,7 @@ def getNumberOfStudentsSignedToSubject(subjects):
 
         arrayOfData.append(regesteredlectures.count())
 
-    print(arrayOfData)
+    #print(arrayOfData)
 
     return arrayOfData
 
@@ -44,7 +47,7 @@ def getNumberOfFilesSignedToSubject(subjects):
 
         arrayOfData.append(files.count())
 
-    print(arrayOfData)
+    #print(arrayOfData)
 
     return arrayOfData
 
@@ -59,13 +62,33 @@ def calculateAverageRatings():
 
     rates = Rating.objects.all().values_list('score',flat=True)
     print(rates)
-    print(list(rates))
+    #print(list(rates))
     sum =sumOfList(list(rates))
     numOfRates = rates.count()
     result = sum/numOfRates
 
     return result
     
+
+def getRating():
+    #print("rates")
+    rates =Rating.objects.all()
+    one = rates.filter(score=1).count()
+    two = rates.filter(score=2).count()
+    three = rates.filter(score=3).count()
+    four = rates.filter(score=4).count()
+    five = rates.filter(score=5).count()
+    result = [five,four,three,two,one]
+    #print(result)
+    return result
+
+def calculateSumOfList(List):
+    sum =0
+
+    for i in range(len(List)):
+        sum+=List[i]
+
+    return sum
     
     
 
@@ -160,20 +183,26 @@ def dashboardPage(request):
         genderData = getDataOfGender(request)
         averageRatings = calculateAverageRatings()
         subjects = Subject.objects.all()
-        print(subjects)
+        #print(subjects)
         subjectList = list(subjects.values_list('title',flat=True))
-        print(subjectList)
+        #print(subjectList)
         numberOfStudentsSignedToSubject = getNumberOfStudentsSignedToSubject(subjects)
         numberOfFilesSignedToSubject = getNumberOfFilesSignedToSubject(subjects)
         today =  date.today()
         #print(d.day)
+        admins = Admin.objects.all()
         students = Student.objects.all()
         lectures = Lecture.objects.all()
         numberOfStudents = students.count()
         numberOfLectures = lectures.count()
         numberOfFiles = File.objects.all().count()
         dailyLogins = Login.objects.filter(loginTime__day = today.day).count()
-        print(dailyLogins)
+
+        listOfRatings = getRating()
+
+        #print(dailyLogins)
+        mostActiveLectures = sorted(lectures,
+        key=attrgetter('signed'))
         
         return render(request,'courses/dashboard.html',{
             'levels':levels,
@@ -183,21 +212,38 @@ def dashboardPage(request):
             'numberOfSubjects':subjects.count(),
             'averageRatings':averageRatings,
             'numberOfStudents':numberOfStudents,
+            'numberOfAdmins':admins.count(),
             'numberOfLectures':numberOfLectures,
             'numberOfFiles':numberOfFiles,
             'dailyLogins':dailyLogins,
+            'star_1':listOfRatings[4],
+            'star_2':listOfRatings[3],
+            'star_3':listOfRatings[2],
+            'star_4':listOfRatings[1],
+            'star_5':listOfRatings[0],
+            'totalRatings':calculateSumOfList(listOfRatings),
+            'rankedData':reversed(mostActiveLectures),
             'chart_1':genderData,
             'subjects':subjectList,
             'chart_2':numberOfStudentsSignedToSubject,
             'chart_3':numberOfFilesSignedToSubject,
+            'chart_5':listOfRatings,
             
 
 
         })
 
-    return render(request,'courses/dashboard.html',{
+    else:
+        student = get_object_or_404(Student,id=request.user.id)
+        lectures = Lecture.objects.filter(gradeLevel=student.level)
+        #files = File.objects.filter(level=student.level)
+        
+        return render(request,'courses/dashboard.html',{
         'student':student,
+        'lectures':reversed(lectures),
     })
+
+    
 
 
 
@@ -435,10 +481,14 @@ def lecturesTable(request):
     if user.is_superuser:
     
         lectures = Lecture.objects.all()
+        levels = Level.objects.all()
+        subjects = Subject.objects.all()
 
         return render(request,'courses/lecturesTable.html',{
             'lectures':lectures.reverse(),
             'student':user,
+            'levels':levels,
+            'subjects':subjects,
         })
 
 
@@ -453,7 +503,15 @@ def profileCards(request):
 
     if user.is_superuser:
     
-        users = User.objects.all()
+        
+        admins = Admin.objects.all()
+        students = Student.objects.all()
+        
+        users = sorted(
+        chain(admins, students),
+        key=attrgetter('id'))
+        
+        print(users)
 
         return render(request,'courses/profileCards.html',{
             'users':users,

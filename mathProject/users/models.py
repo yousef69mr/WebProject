@@ -83,7 +83,7 @@ GENDER=[
 
 class User(AbstractBaseUser,PermissionsMixin):
     
-    profile_image = models.ImageField(default="media/defaults/avatar.svg",upload_to='media/profile_images/%y/%m/%d', validators=[validate_image_file_extension],null=True)
+    profile_image = models.ImageField(default="media/defaults/avatar.svg",upload_to='media/profile_images/%y/%m/%d', validators=[validate_image_file_extension],null=True,blank=True)
     username = models.CharField(max_length=150,error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',unique=True)
     full_name = models.CharField(max_length=200,help_text='Required. 200 characters or fewer. Letters, digits and @/./+/-/_ only.',verbose_name="Full Name")
     first_name = models.CharField(max_length=100)

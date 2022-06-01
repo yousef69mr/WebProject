@@ -35,6 +35,15 @@ class Lecture(models.Model):
     class Meta:
         ordering=['id']
 
+    def getNumberOfFiles(self):
+        files = File.objects.all()
+        counter = 0
+        for instance in files:
+            if self.id == instance.lecture.id:
+                counter+=1
+
+        return counter
+
     def getNumberOfRegistrations(self):
         regestered = RegisteredLecture.objects.all()
         counter = 0
@@ -43,6 +52,8 @@ class Lecture(models.Model):
                 counter+=1
 
         return counter
+
+    signed = property(getNumberOfRegistrations)
 
 
 
@@ -68,7 +79,7 @@ class File(models.Model):
     file =models.FileField(default=NULL,upload_to='media/files/%Y/%m/%d/', validators=[validate_file_extension])
     level = models.ForeignKey(Level,on_delete=models.CASCADE,default=NULL)
     branch=models.ForeignKey(Subject,on_delete=models.CASCADE,verbose_name='Educational Subject')
-    uploadTime =models.DateTimeField(default=datetime.now)
+    uploadTime =models.DateTimeField(default=datetime.now,verbose_name='Upload Time')
     isActive=models.BooleanField(default=True,verbose_name='active')
 
     def truncate(cls):

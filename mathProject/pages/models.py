@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from operator import le
 
 from django.db import models
-from datetime import datetime,date
+from datetime import datetime,date,timedelta
 
 
 
@@ -80,17 +80,25 @@ class Level(models.Model):
         
         from users.models import Login
 
-        data =[]
+        
+        
         today = date.today()
         currentTime = datetime.now()
         todayLogins = Login.objects.filter(loginTime__day = today.day,level = self)
-        print(todayLogins)
+
+        yesterday = today - timedelta(days=1)
+        yesterdayLogins = Login.objects.filter(loginTime__day = yesterday.day,level = self)
+        
+        data=[yesterdayLogins.filter(loginTime__hour= 23).count()]
+        #print(yesterdayLogins)
+        #print(todayLogins)
+
         hour = currentTime.strftime("%H")
-        print(int(hour))
+        #print(int(hour))
         
         
         for i in range(int(hour)):
-            print(i)
+            #print(i)
             hourLogin = todayLogins.filter(loginTime__hour= i)
             data.append(hourLogin.count())
 

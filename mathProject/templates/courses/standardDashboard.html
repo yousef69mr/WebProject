@@ -2,12 +2,46 @@
 
 <html>
     <head>
-
+    <link rel="stylesheet" href="{%static 'css/standardDashboard.css'%}"><br>
+    <h1> Activity Stream </h1>
     </head>
     <body>
-        <div class="text">Standard Dashboard</div>
-        
-    </body>
-    
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <img src="{%static 'img/megaphone.png'%}" width="40" height="40">
+                        </th>
+                        <th>Course Name</th>          
+                        <th>Announcment</th>
+                        <th>Creation Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for lecture in lectures%}
+                    <tr>
+                        <td>
+                            <img src="{%static 'img/documents.png'%}" width="40" height="40">
+                        </td>
+                    
+                        <td>{{lecture.branch|title}}</td>
+                        <td>{{lecture.title|title}} lecture is uploaded now</td>
+                        <td>{{lecture.creationTime}}</td>
+                        <td>
+                            <a href="{%url 'lectures'%}">
+                                <button type="button" class="View">
+                                    View                      
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
 
+    </body>
 </html>

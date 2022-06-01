@@ -10,7 +10,7 @@
 .rate-container{
   position: relative;
   width: 400px;
-  height: 700px;
+  min-height: 500px;
   background: black;
   padding: 20px 30px;
   border: 1px solid #444;
@@ -19,12 +19,13 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  border-radius: 8px;
 }
 h1{
-    margin-bottom: 5px;
-    width: 250px;
-    color: white;
-    display: block;
+  margin-bottom: 5px;
+  width: 250px;
+  color: white;
+  display: block;
 }
 .rate-container .post{
   display: none;
@@ -48,6 +49,7 @@ h1{
 }
 .rate-container .star-widget input{
   display: none;
+  border-radius: 8px;
 }
  .star-widget label{
   font-size: 40px;
@@ -125,8 +127,9 @@ form .textarea textarea{
   background: #222;
   padding: 10px;
   font-size: 17px;
- margin-bottom: 50px;
+  margin-bottom: 50px;
   resize: none;
+  border-radius: 8px;
 }
 .textarea textarea:focus{
   border-color: #444;
@@ -148,6 +151,7 @@ form .btn button{
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: 8px;
 }
 form .btn button:hover{
   background: #1b1b1b;

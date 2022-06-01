@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 
 class allUsersAdmin(UserAdmin):
     model = User
+    ordering =['id']
     list_display= ['id','username','email','phone','gender','last_login','is_active','is_verified']
     list_display_links= []
     #list_editable =['gender']
@@ -15,26 +16,29 @@ class allUsersAdmin(UserAdmin):
     fieldsets = [
 
         ('Authentication Info',{
+            'classes':('wide',),
             'fields':('username','email','password','raw_password')
         }),
         ('Personal info',{
+            'classes':('wide',),
             'fields':('profile_image','full_name','first_name','last_name','gender')
         }),
         ('Contact info',{
+            'classes':('wide',),
             'fields':('phone',)
         }),
         ('Permissions',{
+            'classes':('wide',),
             'fields':('is_active','is_staff','is_superuser','is_verified')
         }),
-        ('Important Dates',{
-            'fields':('last_login','date_joined')
-        }),
+        
        
     ]
 
 
 class StudentAdmin(UserAdmin):
     model = Student
+    ordering =['id']
     list_display= ['id','username','email','phone','gender','level','is_active','is_verified']
     list_display_links= ['username','level','email']
     list_editable =['gender']
@@ -62,11 +66,11 @@ class StudentAdmin(UserAdmin):
         }),
     ]
 
-   
 
 class adminAdmin(UserAdmin):
     
     model = Admin
+    ordering =['id']
     list_display= ['id','username','email','phone','gender','is_active','is_verified']
     list_display_links= ['username','email']
     #list_editable =['gender']
@@ -92,6 +96,8 @@ class adminAdmin(UserAdmin):
         }),
        
     ]
+
+    
 
 class LoginAdmin(admin.ModelAdmin):
     model = Login

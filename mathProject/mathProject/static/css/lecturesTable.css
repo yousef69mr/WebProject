@@ -56,6 +56,12 @@
     color: var(--main-color);
 }
 
+select{
+    padding: 4px;
+    margin-left: 5px;
+    border-radius: 3px;
+}
+
 table{
     border-collapse: collapse;
     border-radius: 10px;
@@ -67,11 +73,11 @@ thead tr{
     border-bottom: 1px solid #f0f0f0;
 }
 
-thead td{
+thead th{
     font-weight: 700;
 }
 
-td{
+th,td{
     padding: .5rem 1rem;
     font-size: .9rem;
     color: #222;
@@ -85,6 +91,7 @@ td .status{
     margin-right: 1rem;
 }
 
+tr th:last-child,
 tr td:last-child{
     display: flex;
     align-items: center;
@@ -127,6 +134,31 @@ tbody tr:last-child td:first-child{
     width: 100%;
     overflow-x: auto;
 }
+
+
+.table-sortable th{
+    cursor: pointer;
+}
+
+.table-sortable .th-sort-asc::after{
+    content: "\25b4";
+}
+
+.table-sortable .th-sort-desc::after{
+    content: "\25be";
+}
+
+.table-sortable .th-sort-asc::after,
+.table-sortable .th-sort-desc::after{
+    margin-left: 5px;
+}
+
+.table-sortable .th-sort-asc,
+.table-sortable .th-sort-desc{
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
 
 
 
