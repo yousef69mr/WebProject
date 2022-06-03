@@ -17,7 +17,7 @@ class allUsersAdmin(UserAdmin):
 
         ('Authentication Info',{
             'classes':('wide',),
-            'fields':('username','email','password','raw_password')
+            'fields':('username','email','password')
         }),
         ('Personal info',{
             'classes':('wide',),
@@ -47,7 +47,7 @@ class StudentAdmin(UserAdmin):
 
     fieldsets = [
         ('Authentication Info',{
-            'fields':('username','email','password','raw_password')
+            'fields':('username','email','password')
         }),
         ('Personal info',{
             'fields':('profile_image','full_name','first_name','last_name','gender','address')
@@ -80,7 +80,7 @@ class adminAdmin(UserAdmin):
     fieldsets = [
 
         ('Authentication Info',{
-            'fields':('username','email','password','raw_password')
+            'fields':('username','email','password')
         }),
         ('Personal info',{
             'fields':('profile_image','full_name','first_name','last_name','gender')

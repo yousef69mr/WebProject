@@ -436,20 +436,17 @@ def contactUsPage(request):
     user = get_object_or_404(User,id=request.user.id)
 
     if request.method == "POST":
-        userName = request.POST.get('name')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
+
+        
         subject = request.POST.get('subject')
         content = request.POST.get('message')
 
-        print(userName)
-        print(phone)
-        print(email)
+        
         print(subject)
         print(content)
 
         try:
-            message = Message(sender=userName,email=email,phone=phone,message=content,subject=subject)
+            message = Message(sender=user.username,email=user.email,phone=user.phone,message=content,subject=subject)
             message.save()
             messages.success(request,"Sent Successfully")
             return render(request, 'courses/contactFormPage.html', {
@@ -458,7 +455,7 @@ def contactUsPage(request):
             })
 
         except:
-            messages.warning(request,"An Error Occured ")
+            messages.warning(request,"message's sent failed")
             return render(request, 'courses/contactFormPage.html', {
                 'student':user,
                 "message": "An Error Occured ... Try Again Later"
