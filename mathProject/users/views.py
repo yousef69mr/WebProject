@@ -9,7 +9,7 @@ from .models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode , urlsafe_base64_encode
-from django.utils.encoding import force_bytes,force_text
+from django.utils.encoding import force_bytes,force_str
 from .utils import generate_token
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -19,17 +19,16 @@ from django.conf import settings
 
 
 def getDataOfGender(request):
-    if request.is_ajax:
+    
+    users = User.objects.all()
+    male = users.filter(gender = 'male').count()
+    female = users.filter(gender = 'female').count()
 
-        users = User.objects.all()
-        male = users.filter(gender = 'male').count()
-        female = users.filter(gender = 'female').count()
+    
+    print(male)
+    print(female)
 
-        
-        print(male)
-        print(female)
-
-        return [female,male]
+    return [female,male]
     
     
     
@@ -87,7 +86,7 @@ def send_activation_email(user,request):
 
 def activate_user(request,uidb64,token):
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = get_object_or_404(User,id=uid)
         print(uid)
         print(user.email)
@@ -206,7 +205,7 @@ class CompletePasswordReset(View):
         print(uidb64,token)
 
         try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = get_object_or_404(User,id=uid)
             print(uid)
             print(user.email)
@@ -278,7 +277,7 @@ class CompletePasswordReset(View):
 
 def set_new_password(request,uidb64,token):
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = get_object_or_404(User,id=uid)
         print(uid)
         print(user.email)
